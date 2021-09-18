@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { Input, Button } from "@material-ui/core";
 import sendMessageUtils from "./SendMessageUtils";
-import ImageIcon from "@mui/icons-material/Image";
 import SendIcon from "@mui/icons-material/Send";
 import styled from "styled-components";
 import { StyledButton } from "./StyledStuff";
+import { AttachFile } from "../AttachFile";
 
-const StyledPicButton = styled(StyledButton)`
-  border-radius: 25px;
-  height: 50px;
-  width: 50px;
-`;
+// const StyledPicButton = styled(StyledButton)`
+//   border-radius: 25px;
+//   height: 50px;
+//   width: 50px;
+// `;
 
 const StyledSendButton = styled(StyledButton)`
   width: 50px;
@@ -20,20 +20,24 @@ const StyledSendButton = styled(StyledButton)`
 
 function SendMessageBlock({ selectedFrd }) {
   const [msg, setMsg] = useState("");
+  const [file, setFile] = useState(null)
+
 
   async function sendMessage(e) {
     e.preventDefault();
     await sendMessageUtils({ selectedFrd, msg });
     setMsg("");
   }
+  const onInputChange = (e) => {
+    console.log(e.target.files)
+    setFile(e.target.file[0])
+  }
 
   return (
     <div>
       <form onSubmit={sendMessage}>
         <div className="sendMsg">
-          <StyledPicButton>
-            <ImageIcon />
-          </StyledPicButton>
+          <AttachFile callback = {onInputChange} />
           <Input
             style={{
               width: "70%",
