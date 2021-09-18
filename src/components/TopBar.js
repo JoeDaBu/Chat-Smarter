@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { auth } from "../firebase.js";
-import { Button } from "@material-ui/core";
+import { Button, InputLabel } from "@material-ui/core";
 import styled from "styled-components";
 import AddIcon from "@mui/icons-material/Add";
 import Dialog from "@mui/material/Dialog";
@@ -11,6 +11,11 @@ import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
 import sendMessage from "./SendMessageUtils";
 import { StyledButton } from "./StyledStuff";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import SearchIcon from "@mui/icons-material/Search";
+import FormControl from "@mui/material/FormControl";
+import Input from "@mui/material/Input";
 
 const TopBarContainer = styled.div`
   display: flex;
@@ -48,7 +53,20 @@ const StyledIconButton = styled(StyledButton)`
   margin-top: 10px;
 `;
 
-function TopBar({ friend, setSelectedFrd }) {
+const StyledForm = styled.form`
+  position: relative;
+  top: 13px;
+  margin-left: 15px;
+  padding-left: 10px;
+`;
+
+function TopBar({
+  friend,
+  setSelectedFrd,
+  searchWords,
+  setSearchWords,
+  setIsSearchOpen,
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -72,6 +90,11 @@ function TopBar({ friend, setSelectedFrd }) {
     setIsOpen(false);
   }
 
+  function handleSearch(e) {
+    e.stopPropagation();
+    setIsSearchOpen(true);
+  }
+
   return (
     <TopBarContainer>
       <StyledIconButton onClick={() => setIsOpen(true)}>
@@ -81,6 +104,21 @@ function TopBar({ friend, setSelectedFrd }) {
       <StyledFriendName>
         {friend ? friend.name : `No friend chosen`}
       </StyledFriendName>
+      <StyledForm>
+        <Input
+          type={"text"}
+          value={searchWords}
+          onChange={(e) => setSearchWords(e.target.value)}
+          endAdornment={
+            <InputAdornment position="end">
+              <IconButton aria-label="search" onClick={handleSearch} edge="end">
+                <SearchIcon />
+              </IconButton>
+            </InputAdornment>
+          }
+          label="Search"
+        />
+      </StyledForm>
       <Dialog open={isOpen} onClose={handleClose}>
         <DialogTitle>Add Friend</DialogTitle>
         <DialogContent>
