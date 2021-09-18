@@ -23,7 +23,7 @@ export const ReceiverBubble = styled.div`
 export const MessageTxt = styled.div`
   border-radius: 5px;
   padding: 10px 15px;
-  box-shadow: 1px 1px 2px 0px #0000002b;
+  box-shadow: 1px 1px 2px 0 #0000002b;
 `;
 
 function ChatMessages({ selectedFrd, messages }) {

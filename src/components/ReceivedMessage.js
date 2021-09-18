@@ -19,8 +19,11 @@ const NotSpecialWord = styled.div`
   padding-right: 4px;
 `;
 
-const SpecialMessageTxt = styled(MessageTxt)`
+const SpecialMessageTxt = styled.div`
   display: flex;
+  border-radius: 5px;
+  padding: 10px 15px;
+  box-shadow: 1px 1px 2px 0 #0000002b;
 `;
 
 function RenderReceivedMessage({ text, photoURL }) {
@@ -62,10 +65,9 @@ function RenderReceivedMessage({ text, photoURL }) {
     // const entityResults = await client.extractKeyPhrases(text);
     // return entityResults[0].keyPhrases;
     await sleep(500);
-    if (text.split(" ").includes("bitcoin")) {
+    if (text.toLowerCase().split(" ").includes("bitcoin")) {
       setKeywords(["bitcoin"]);
     }
-    return null;
   }
   if (keywords.length > 0) {
     return (
@@ -73,7 +75,7 @@ function RenderReceivedMessage({ text, photoURL }) {
         <PersonPic src={photoURL} alt="" />
         <SpecialMessageTxt>
           {text.split(" ").map((word) => {
-            if (keywords.includes(word)) {
+            if (keywords.includes(word.toLowerCase())) {
               return <StyledWordButton>{`${word} `}</StyledWordButton>;
             } else {
               return <NotSpecialWord>{`${word} `}</NotSpecialWord>;
