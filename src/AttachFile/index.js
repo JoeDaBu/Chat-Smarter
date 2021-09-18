@@ -6,15 +6,14 @@ import ImageIcon from "@mui/icons-material/Image";
 export const AttachFile = ({callback}) => {
   return (
     <div>
-      <form method="post" action="#" id="#">
         <div className="form-group files">
           <input type="file"
                 onChange = {callback}
                 className="form-control" 
-                multiple="" />
+                multiple=""
+                accept="image/x-png,image/jpeg" />
         </div>
         <button>Submit</button>
-      </form>
       {/* <StyledPicButton onClick = {callback} >
        
         <ImageIcon>

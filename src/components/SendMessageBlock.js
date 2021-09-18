@@ -1,3 +1,4 @@
+import axios from 'axios'
 import React, { useState } from "react";
 import { Input, Button } from "@material-ui/core";
 import sendMessageUtils from "./SendMessageUtils";
@@ -25,17 +26,31 @@ function SendMessageBlock({ selectedFrd }) {
 
   async function sendMessage(e) {
     e.preventDefault();
-    await sendMessageUtils({ selectedFrd, msg });
+    await sendMessageUtils({ selectedFrd, msg, file });
     setMsg("");
   }
   const onInputChange = (e) => {
     console.log(e.target.files)
-    setFile(e.target.file[0])
+    setFile(e.target.files[0])
   }
+
+  // const onSubmit = (e) => {
+  //   e.preventDefault()
+  //   const data = new FormData()
+  //   data.append('file', file)
+  //   axios.post('//localhost:3000/upload', data)
+  //     .then((e) => {
+  //       console.log('success')
+  //     })
+  //     .catch(e => {
+  //       console.error('Error', e)
+  //     })
+  //   sendMessage(e)
+  // }
 
   return (
     <div>
-      <form onSubmit={sendMessage}>
+      <form method = "post" action='#' onSubmit={sendMessage}>
         <div className="sendMsg">
           <AttachFile callback = {onInputChange} />
           <Input
