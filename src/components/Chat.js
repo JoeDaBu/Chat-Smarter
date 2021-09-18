@@ -5,6 +5,7 @@ import TopBar from "./TopBar";
 import FrdScreen from "./FrdScreen";
 
 import styled from "styled-components";
+import ChatMessages from "./ChatMessages";
 
 const ChatContainer = styled.div`
   display: flex;
@@ -20,28 +21,6 @@ const LeftWindow = styled.div`
   width: 20vw;
   height: 90vh;
   overflow-y: scroll;
-`;
-
-const PersonPic = styled.img`
-  width: 40px;
-  border-radius: 25px;
-  margin: 5px;
-`;
-
-const SenderBubble = styled.div`
-  display: flex;
-  justify-content: flex-end;
-`;
-
-const ReceiverBubble = styled.div`
-  display: flex;
-  justify-content: flex-start;
-`;
-
-const MessageTxt = styled.div`
-  border-radius: 5px;
-  padding: 10px 15px;
-  box-shadow: 1px 1px 2px 0px #0000002b;
 `;
 
 const JustChats = styled.div`
@@ -72,15 +51,6 @@ function Chat() {
       });
   }, []);
 
-  function getMessagesFromFriend(friendEmail) {
-    const selectedMessages = messages.filter(
-      (msg) =>
-        msg.sentByEmail === friendEmail ||
-        msg.sentByEmail === auth.currentUser.email
-    );
-    return selectedMessages;
-  }
-
   return (
     <ChatContainer>
       <TopBar friend={selectedFrd} setSelectedFrd={setSelectedFrd} />
@@ -94,25 +64,7 @@ function Chat() {
       <RightChatWindow>
         <JustChats>
           {selectedFrd ? (
-            getMessagesFromFriend(selectedFrd.email).map(
-              ({ id, text, photoURL, uid }) => {
-                if (uid === auth.currentUser.uid) {
-                  return (
-                    <SenderBubble>
-                      <MessageTxt>{text}</MessageTxt>
-                      <PersonPic src={photoURL} alt="" />
-                    </SenderBubble>
-                  );
-                } else {
-                  return (
-                    <ReceiverBubble>
-                      <PersonPic src={photoURL} alt="" />
-                      <MessageTxt>{text}</MessageTxt>
-                    </ReceiverBubble>
-                  );
-                }
-              }
-            )
+            <ChatMessages selectedFrd={selectedFrd} messages={messages} />
           ) : (
             <div>No Friend Chosen</div>
           )}

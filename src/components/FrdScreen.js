@@ -1,13 +1,31 @@
 import React, { useState, useEffect } from "react";
-import { Paper } from "@mui/material";
 import { db, auth } from "../firebase";
 import styled from "styled-components";
 
-const EachFriend = styled(Paper)`
+const EachFriend = styled.div`
   margin: 5px;
+  padding: 5px;
+  border-bottom: #dbdbdb 1px solid;
+  display: flex;
 `;
 
 const Message = styled.div``;
+
+const ProfilePhoto = styled.img`
+  width: 45px;
+  height: 45px;
+  border-radius: 50px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+`;
+
+const RightSide = styled.div`
+  padding: 0 5px;
+`;
+
+const StyledName = styled.div`
+  font-size: 20px;
+`;
 
 function FrdScreen({ setSelectedFrd, messages, selectedFrd }) {
   const [friends, setFriends] = useState([]);
@@ -24,7 +42,13 @@ function FrdScreen({ setSelectedFrd, messages, selectedFrd }) {
 
     allUniqueEmails.forEach((email) => {
       const newestMsgOverall = messages
-        .filter((msg) => msg.sentByEmail === email || msg.sentToEmail === email)
+        .filter(
+          (msg) =>
+            (msg.sentByEmail === email &&
+              msg.sentToEmail === auth.currentUser.email) ||
+            (msg.sentToEmail === email &&
+              msg.sentByEmail === auth.currentUser.email)
+        )
         .sort((a, b) => {
           return b.createdAt - a.createdAt;
         });
@@ -38,7 +62,10 @@ function FrdScreen({ setSelectedFrd, messages, selectedFrd }) {
         email: newestMsg.sentByEmail,
         createdAt: newestMsg.createdAt,
         photoURL: newestMsg.photoURL,
-        message: newestMsgOverall[0].text,
+        message:
+          newestMsgOverall[0].sentToEmail === email
+            ? `You: ${newestMsgOverall[0].text}`
+            : newestMsgOverall[0].text,
       };
       tempFriends.push({ ...tempFriend });
     });
@@ -46,7 +73,12 @@ function FrdScreen({ setSelectedFrd, messages, selectedFrd }) {
     if (!selectedFrd) {
       setSelectedFrd(tempFriends[0]);
     }
-    setFriends(tempFriends);
+
+    setFriends(
+      tempFriends.sort((a, b) => {
+        return b.createdAt - a.createdAt;
+      })
+    );
   }, [messages]);
 
   function handleFriendClick(friend) {
@@ -61,8 +93,11 @@ function FrdScreen({ setSelectedFrd, messages, selectedFrd }) {
             key={`friend${index}`}
             onClick={() => handleFriendClick(friend)}
           >
-            <div>{friend.name}</div>
-            <Message>{friend.message}</Message>
+            <ProfilePhoto src={friend.photoURL} />
+            <RightSide>
+              <StyledName>{friend.name}</StyledName>
+              <Message>{friend.message}</Message>
+            </RightSide>
           </EachFriend>
         );
       })}

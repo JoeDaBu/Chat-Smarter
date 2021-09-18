@@ -23,13 +23,20 @@ const TopBarContainer = styled.div`
   height: 67px;
 `;
 
-const StyledButton = styled(Button)`
-  padding: 20px;
+const StyledButton = styled.button`
+  padding: 10px;
   font-size: 15px;
   border-radius: 0;
   font-weight: 600;
   position: absolute;
-  right: 0;
+  right: 50px;
+  border: 0;
+  width: 100px;
+  top: 15px;
+  background: transparent;
+  :hover {
+    background-color: #d9d9d9;
+  }
 `;
 
 const StyledFriendName = styled.div`
