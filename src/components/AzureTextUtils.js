@@ -16,7 +16,7 @@ export async function keyPhraseExtraction(text) {
   if (!text || text.length < 5) return [""];
   // const entityResults = await client.extractKeyPhrases(text);
   // return entityResults[0].keyPhrases;
-  // await sleep(200);
+  await sleep(200);
   if (text.toLowerCase().split(" ").includes("bitcoin")) {
     return ["bitcoin"];
     // setKeywords(["bitcoin"]);
