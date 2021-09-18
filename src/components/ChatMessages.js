@@ -1,24 +1,26 @@
 import { auth } from "../firebase";
 import React from "react";
 import styled from "styled-components";
+import RenderReceivedMessage from "./ReceivedMessage";
 
-const PersonPic = styled.img`
+export const PersonPic = styled.img`
   width: 40px;
+  height: 40px;
   border-radius: 25px;
   margin: 5px;
 `;
 
-const SenderBubble = styled.div`
+export const SenderBubble = styled.div`
   display: flex;
   justify-content: flex-end;
 `;
 
-const ReceiverBubble = styled.div`
+export const ReceiverBubble = styled.div`
   display: flex;
   justify-content: flex-start;
 `;
 
-const MessageTxt = styled.div`
+export const MessageTxt = styled.div`
   border-radius: 5px;
   padding: 10px 15px;
   box-shadow: 1px 1px 2px 0px #0000002b;
@@ -48,12 +50,7 @@ function ChatMessages({ selectedFrd, messages }) {
           </SenderBubble>
         );
       } else {
-        return (
-          <ReceiverBubble>
-            <PersonPic src={photoURL} alt="" />
-            <MessageTxt>{text}</MessageTxt>
-          </ReceiverBubble>
-        );
+        return <RenderReceivedMessage text={text} photoURL={photoURL} />;
       }
     }
   );

@@ -2,19 +2,20 @@ import React, { useState } from "react";
 import { Input, Button } from "@material-ui/core";
 import sendMessageUtils from "./SendMessageUtils";
 import ImageIcon from "@mui/icons-material/Image";
+import SendIcon from "@mui/icons-material/Send";
 import styled from "styled-components";
+import { StyledButton } from "./StyledStuff";
 
-const StyledPicButton = styled.button`
-  border: 0;
+const StyledPicButton = styled(StyledButton)`
   border-radius: 25px;
-  height: 40px;
-  width: 40px;
-  margin-top: 10px;
-  background-color: transparent;
-  transition: 0.2s;
-  :hover {
-    background-color: #d9d9d9;
-  }
+  height: 50px;
+  width: 50px;
+`;
+
+const StyledSendButton = styled(StyledButton)`
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
 `;
 
 function SendMessageBlock({ selectedFrd }) {
@@ -46,18 +47,9 @@ function SendMessageBlock({ selectedFrd }) {
             value={msg}
             onChange={(e) => setMsg(e.target.value)}
           />
-          <Button
-            style={{
-              width: "18%",
-              fontSize: "15px",
-              fontWeight: "550",
-              margin: "4px 0 -13px 0",
-              maxWidth: "200px",
-            }}
-            type="submit"
-          >
-            Send
-          </Button>
+          <StyledSendButton type="submit">
+            <SendIcon />
+          </StyledSendButton>
         </div>
       </form>
     </div>

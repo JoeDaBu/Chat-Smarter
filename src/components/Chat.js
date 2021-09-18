@@ -18,7 +18,7 @@ const RightChatWindow = styled.div`
 
 const LeftWindow = styled.div`
   margin-top: 67px;
-  width: 20vw;
+  width: 30vw;
   height: 90vh;
   overflow-y: scroll;
 `;

@@ -10,6 +10,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
 import sendMessage from "./SendMessageUtils";
+import { StyledButton } from "./StyledStuff";
 
 const TopBarContainer = styled.div`
   display: flex;
@@ -23,39 +24,28 @@ const TopBarContainer = styled.div`
   height: 67px;
 `;
 
-const StyledButton = styled.button`
+const StyledOutButton = styled(StyledButton)`
   padding: 10px;
   font-size: 15px;
   border-radius: 0;
   font-weight: 600;
   position: absolute;
   right: 50px;
-  border: 0;
   width: 100px;
   top: 15px;
-  background: transparent;
-  :hover {
-    background-color: #d9d9d9;
-  }
 `;
 
 const StyledFriendName = styled.div`
   padding-top: 23px;
 `;
 
-const StyledIconButton = styled.button`
+const StyledIconButton = styled(StyledButton)`
   position: absolute;
   left: 0;
-  border: 0;
   border-radius: 25px;
   height: 40px;
   width: 40px;
   margin-top: 10px;
-  background-color: transparent;
-  transition: 0.2s;
-  :hover {
-    background-color: #d9d9d9;
-  }
 `;
 
 function TopBar({ friend, setSelectedFrd }) {
@@ -87,7 +77,7 @@ function TopBar({ friend, setSelectedFrd }) {
       <StyledIconButton onClick={() => setIsOpen(true)}>
         <AddIcon />
       </StyledIconButton>
-      <StyledButton onClick={() => auth.signOut()}>Log Out</StyledButton>
+      <StyledOutButton onClick={() => auth.signOut()}>Log Out</StyledOutButton>
       <StyledFriendName>
         {friend ? friend.name : `No friend chosen`}
       </StyledFriendName>
