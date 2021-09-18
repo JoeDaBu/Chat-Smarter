@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { MessageTxt, PersonPic, ReceiverBubble } from "./ChatMessages";
-import { keyPhraseExtraction } from "./AzureTextUtils";
 import styled from "styled-components";
+import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied";
 
 const StyledWordButton = styled.div`
   :hover {
@@ -21,12 +21,25 @@ const SpecialMessageTxt = styled.div`
   box-shadow: 1px 1px 2px 0 #0000002b;
 `;
 
+const IconContainer = styled.div`
+  position: relative;
+  right: 15px;
+  bottom: 15px;
+  background: white;
+  width: 35px;
+  height: 35px;
+  border-radius: 35px;
+  cursor: pointer;
+`;
+
 function RenderReceivedMessage({
+  sentiment,
   keywords,
   text,
   photoURL,
   setSelectedKeyword,
   setIsOpen,
+  setIsPuppyOpen,
 }) {
   // const [keywords, setKeywords] = useState([]);
   //
@@ -62,31 +75,27 @@ function RenderReceivedMessage({
     setIsOpen(true);
   }
 
-  if (keywords && keywords.length > 0) {
-    return (
-      <ReceiverBubble>
-        <PersonPic src={photoURL} alt="" />
-        <SpecialMessageTxt>
-          {text.split(" ").map((word) => {
-            if (keywords.includes(word.toLowerCase())) {
-              return (
-                <StyledWordButton
-                  onClick={() => handleSetKeyword(word)}
-                >{`${word} `}</StyledWordButton>
-              );
-            } else {
-              return <NotSpecialWord>{`${word} `}</NotSpecialWord>;
-            }
-          })}
-        </SpecialMessageTxt>
-      </ReceiverBubble>
-    );
-  }
-
   return (
     <ReceiverBubble>
       <PersonPic src={photoURL} alt="" />
-      <MessageTxt>{text}</MessageTxt>
+      <SpecialMessageTxt>
+        {text.split(" ").map((word) => {
+          if (keywords && keywords.includes(word.toLowerCase())) {
+            return (
+              <StyledWordButton
+                onClick={() => handleSetKeyword(word)}
+              >{`${word} `}</StyledWordButton>
+            );
+          } else {
+            return <NotSpecialWord>{`${word} `}</NotSpecialWord>;
+          }
+        })}
+      </SpecialMessageTxt>
+      {sentiment === "negative" && (
+        <IconContainer onClick={() => setIsPuppyOpen(true)}>
+          <SentimentDissatisfiedIcon fontSize="large" />
+        </IconContainer>
+      )}
     </ReceiverBubble>
   );
 }

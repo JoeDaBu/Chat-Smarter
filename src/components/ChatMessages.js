@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import RenderReceivedMessage from "./ReceivedMessage";
 import DefinitionDialog from "./DefinitionDialog";
+import PuppyDialog from "./PuppyDialog";
 
 export const PersonPic = styled.img`
   width: 40px;
@@ -30,6 +31,7 @@ export const MessageTxt = styled.div`
 function ChatMessages({ selectedFrd, messages }) {
   const [selectedKeyword, setSelectedKeyword] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [isPuppyOpen, setIsPuppyOpen] = useState(false);
 
   function getMessagesFromFriend(friendEmail) {
     const selectedMessages = messages.filter(
@@ -43,7 +45,6 @@ function ChatMessages({ selectedFrd, messages }) {
       return a.createdAt - b.createdAt;
     });
   }
-
   return (
     <>
       {selectedKeyword && (
@@ -53,8 +54,9 @@ function ChatMessages({ selectedFrd, messages }) {
           info={selectedKeyword}
         />
       )}
+      <PuppyDialog isPuppyOpen={isPuppyOpen} setIsPuppyOpen={setIsPuppyOpen} />
       {getMessagesFromFriend(selectedFrd.email).map(
-        ({ text, photoURL, uid, keywords }) => {
+        ({ text, photoURL, uid, keywords, sentiment }) => {
           if (uid === auth.currentUser.uid) {
             return (
               <SenderBubble>
@@ -65,6 +67,8 @@ function ChatMessages({ selectedFrd, messages }) {
           } else {
             return (
               <RenderReceivedMessage
+                setIsPuppyOpen={setIsPuppyOpen}
+                sentiment={sentiment}
                 keywords={keywords}
                 setIsOpen={setIsOpen}
                 text={text}
