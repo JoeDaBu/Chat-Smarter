@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'cockroachdb.wsgi.application'
 
 DATABASES = {}
 DATABASES['default'] = dj_database_url.config(default=os.path.expandvars(
-    os.environ['DATABASE_URL']), engine='django_cockroachdb')
+    'postgresql://alex:BOvWTf7HoF9K2oub@free-tier.gcp-us-central1.cockroachlabs.cloud:26257/defaultdb?sslmode=verify-full&sslrootcert=/home/alexyuanxinwang/.postgresql/root.crt&options=--cluster%3Ditchy-ape-3550'), engine='django_cockroachdb')
 
 
 # Password validation

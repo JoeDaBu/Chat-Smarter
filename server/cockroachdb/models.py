@@ -15,5 +15,5 @@ class Trip(models.Model):
         primary_key=True,
         default=uuid.uuid4,
         editable=False)
-    time = models.TimeField()
+    time = models.CharField(max_length=250)
     location = models.CharField(max_length=250)
