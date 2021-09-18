@@ -53,7 +53,7 @@ const StyledIconButton = styled(StyledButton)`
   margin-top: 10px;
 `;
 
-const StyledForm = styled.form`
+const StyledForm = styled.div`
   position: relative;
   top: 13px;
   margin-left: 15px;
@@ -76,7 +76,8 @@ function TopBar({
     setIsOpen(false);
   }
 
-  function handleChat() {
+  function handleChat(e) {
+    e.stopPropagation();
     const tempFriend = {
       name,
       email,
@@ -122,7 +123,6 @@ function TopBar({
       <Dialog open={isOpen} onClose={handleClose}>
         <DialogTitle>Add Friend</DialogTitle>
         <DialogContent>
-          <DialogContentText>Blah Bahs fkjaerkjghwfberjhvb</DialogContentText>
           <TextField
             autoFocus
             required
