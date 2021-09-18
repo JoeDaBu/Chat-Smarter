@@ -79,15 +79,18 @@ function RenderReceivedMessage({
     <ReceiverBubble>
       <PersonPic src={photoURL} alt="" />
       <SpecialMessageTxt>
-        {text.split(" ").map((word) => {
+        {text.split(" ").map((word, i) => {
           if (keywords && keywords.includes(word.toLowerCase())) {
             return (
               <StyledWordButton
+                key={`${i} ${word}`}
                 onClick={() => handleSetKeyword(word)}
               >{`${word} `}</StyledWordButton>
             );
           } else {
-            return <NotSpecialWord>{`${word} `}</NotSpecialWord>;
+            return (
+              <NotSpecialWord key={`${i} ${word}`}>{`${word} `}</NotSpecialWord>
+            );
           }
         })}
       </SpecialMessageTxt>

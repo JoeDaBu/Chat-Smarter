@@ -56,10 +56,10 @@ function ChatMessages({ selectedFrd, messages }) {
       )}
       <PuppyDialog isPuppyOpen={isPuppyOpen} setIsPuppyOpen={setIsPuppyOpen} />
       {getMessagesFromFriend(selectedFrd.email).map(
-        ({ text, photoURL, uid, keywords, sentiment }) => {
+        ({ text, photoURL, uid, keywords, sentiment }, i) => {
           if (uid === auth.currentUser.uid) {
             return (
-              <SenderBubble>
+              <SenderBubble key={`${i}`}>
                 <MessageTxt>{text}</MessageTxt>
                 <PersonPic src={photoURL} alt="" />
               </SenderBubble>
@@ -67,6 +67,7 @@ function ChatMessages({ selectedFrd, messages }) {
           } else {
             return (
               <RenderReceivedMessage
+                key={`${text} ${i}`}
                 setIsPuppyOpen={setIsPuppyOpen}
                 sentiment={sentiment}
                 keywords={keywords}
