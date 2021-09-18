@@ -15,6 +15,7 @@ const ChatContainer = styled.div`
 const RightChatWindow = styled.div`
   width: 100%;
   overflow-y: hidden;
+  height: calc(100vh - 100px);
 `;
 
 const LeftWindow = styled.div`
@@ -27,8 +28,10 @@ const LeftWindow = styled.div`
 const JustChats = styled.div`
   margin-top: 67px;
   width: 100%;
-  height: 100%;
+  height: calc(100vh - 180px);
   overflow-y: scroll;
+  padding-bottom: 120px;
+  margin-bottom: 120px;
 `;
 
 function Chat() {
