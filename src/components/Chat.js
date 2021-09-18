@@ -6,6 +6,7 @@ import FrdScreen from "./FrdScreen";
 
 import styled from "styled-components";
 import ChatMessages from "./ChatMessages";
+import SearchDialog from "./SearchDialog";
 
 const ChatContainer = styled.div`
   display: flex;
@@ -14,6 +15,7 @@ const ChatContainer = styled.div`
 const RightChatWindow = styled.div`
   width: 100%;
   overflow-y: hidden;
+  height: calc(100vh - 100px);
 `;
 
 const LeftWindow = styled.div`
@@ -26,18 +28,21 @@ const LeftWindow = styled.div`
 const JustChats = styled.div`
   margin-top: 67px;
   width: 100%;
-  height: 100%;
+  height: calc(100vh - 180px);
   overflow-y: scroll;
+  padding-bottom: 120px;
+  margin-bottom: 120px;
 `;
 
 function Chat() {
   const [messages, setMessages] = useState([]);
   const [selectedFrd, setSelectedFrd] = useState(null);
+  const [searchWords, setSearchWords] = useState("");
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   useEffect(() => {
     db.collection("msgs")
       .orderBy("createdAt")
-      .limit(50)
       .onSnapshot((snapshot) => {
         setMessages(
           snapshot.docs
@@ -53,7 +58,21 @@ function Chat() {
 
   return (
     <ChatContainer>
-      <TopBar friend={selectedFrd} setSelectedFrd={setSelectedFrd} />
+      <SearchDialog
+        selectedFrd={selectedFrd}
+        messages={messages}
+        searchWords={searchWords}
+        setIsSearchOpen={setIsSearchOpen}
+        isSearchOpen={isSearchOpen}
+        setSearchWords={setSearchWords}
+      />
+      <TopBar
+        friend={selectedFrd}
+        setSelectedFrd={setSelectedFrd}
+        searchWords={searchWords}
+        setSearchWords={setSearchWords}
+        setIsSearchOpen={setIsSearchOpen}
+      />
       <LeftWindow>
         <FrdScreen
           setSelectedFrd={setSelectedFrd}

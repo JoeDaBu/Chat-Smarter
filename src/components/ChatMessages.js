@@ -1,7 +1,9 @@
 import { auth } from "../firebase";
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import RenderReceivedMessage from "./ReceivedMessage";
+import DefinitionDialog from "./DefinitionDialog";
+import PuppyDialog from "./PuppyDialog";
 
 export const PersonPic = styled.img`
   width: 40px;
@@ -27,6 +29,10 @@ export const MessageTxt = styled.div`
 `;
 
 function ChatMessages({ selectedFrd, messages }) {
+  const [selectedKeyword, setSelectedKeyword] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isPuppyOpen, setIsPuppyOpen] = useState(false);
+
   function getMessagesFromFriend(friendEmail) {
     const selectedMessages = messages.filter(
       (msg) =>
@@ -39,20 +45,42 @@ function ChatMessages({ selectedFrd, messages }) {
       return a.createdAt - b.createdAt;
     });
   }
-
-  return getMessagesFromFriend(selectedFrd.email).map(
-    ({ text, photoURL, uid }) => {
-      if (uid === auth.currentUser.uid) {
-        return (
-          <SenderBubble>
-            <MessageTxt>{text}</MessageTxt>
-            <PersonPic src={photoURL} alt="" />
-          </SenderBubble>
-        );
-      } else {
-        return <RenderReceivedMessage text={text} photoURL={photoURL} />;
-      }
-    }
+  return (
+    <>
+      {selectedKeyword && (
+        <DefinitionDialog
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          info={selectedKeyword}
+        />
+      )}
+      <PuppyDialog isPuppyOpen={isPuppyOpen} setIsPuppyOpen={setIsPuppyOpen} />
+      {getMessagesFromFriend(selectedFrd.email).map(
+        ({ text, photoURL, uid, keywords, sentiment }, i) => {
+          if (uid === auth.currentUser.uid) {
+            return (
+              <SenderBubble key={`${i}`}>
+                <MessageTxt>{text}</MessageTxt>
+                <PersonPic src={photoURL} alt="" />
+              </SenderBubble>
+            );
+          } else {
+            return (
+              <RenderReceivedMessage
+                key={`${text} ${i}`}
+                setIsPuppyOpen={setIsPuppyOpen}
+                sentiment={sentiment}
+                keywords={keywords}
+                setIsOpen={setIsOpen}
+                text={text}
+                photoURL={photoURL}
+                setSelectedKeyword={setSelectedKeyword}
+              />
+            );
+          }
+        }
+      )}
+    </>
   );
 }
 

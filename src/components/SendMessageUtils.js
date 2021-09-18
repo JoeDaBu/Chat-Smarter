@@ -1,16 +1,8 @@
 import { db, auth } from "../firebase";
 import firebase from "firebase";
 import { storage } from '../firebase';
-  // const uploadToFirebase = () => {
-  //   if (file) {
-  //     const storageRef = storage.ref()
-  //     const fileRef = storageRef.child(file.name)
-  //     fileRef.put(file)
-  //     .then(()=> {
-  //       alert("Image uploaded")
-  //     })
-  //   }
-  // }
+import { analyzeSentiment, keyPhraseExtraction } from "./AzureTextUtils";
+
 
 
 async function SendMessage({ selectedFrd, msg, files }) {
@@ -36,11 +28,16 @@ async function SendMessage({ selectedFrd, msg, files }) {
   // const data = new FormData()
   // data.append('file', file)
 
+  const keywords = await keyPhraseExtraction(msg);
+  const sentiment = await analyzeSentiment(msg);
+
   await db.collection("msgs").add({
     text: msg,
     photoURL,
     uid,
     sentByName: displayName,
+    keywords,
+    sentiment,
     sentByEmail: email,
     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
     sentToName: selectedFrd.name,
