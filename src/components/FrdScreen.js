@@ -9,7 +9,7 @@ const EachFriend = styled(Paper)`
 
 const Message = styled.div``;
 
-function FrdScreen({ setSelectedFrd, messages }) {
+function FrdScreen({ setSelectedFrd, messages, selectedFrd }) {
   const [friends, setFriends] = useState([]);
 
   useEffect(() => {
@@ -23,21 +23,29 @@ function FrdScreen({ setSelectedFrd, messages }) {
     ];
 
     allUniqueEmails.forEach((email) => {
-      const newestMsg = messages
+      const newestMsgOverall = messages
+        .filter((msg) => msg.sentByEmail === email || msg.sentToEmail === email)
+        .sort((a, b) => {
+          return b.createdAt - a.createdAt;
+        });
+      const newestMsg = newestMsgOverall
         .filter((msg) => msg.sentByEmail === email)
         .sort((a, b) => {
-          return a.createdAt - b.createdAt;
+          return b.createdAt - a.createdAt;
         })[0];
       const tempFriend = {
         name: newestMsg.sentByName,
         email: newestMsg.sentByEmail,
         createdAt: newestMsg.createdAt,
         photoURL: newestMsg.photoURL,
-        message: newestMsg.text,
+        message: newestMsgOverall[0].text,
       };
       tempFriends.push({ ...tempFriend });
     });
 
+    if (!selectedFrd) {
+      setSelectedFrd(tempFriends[0]);
+    }
     setFriends(tempFriends);
   }, [messages]);
 

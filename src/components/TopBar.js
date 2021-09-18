@@ -81,7 +81,9 @@ function TopBar({ friend, setSelectedFrd }) {
         <AddIcon />
       </StyledIconButton>
       <StyledButton onClick={() => auth.signOut()}>Log Out</StyledButton>
-      <StyledFriendName>{friend.name}</StyledFriendName>
+      <StyledFriendName>
+        {friend ? friend.name : `No friend chosen`}
+      </StyledFriendName>
       <Dialog open={isOpen} onClose={handleClose}>
         <DialogTitle>Add Friend</DialogTitle>
         <DialogContent>

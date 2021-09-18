@@ -53,11 +53,7 @@ const JustChats = styled.div`
 
 function Chat() {
   const [messages, setMessages] = useState([]);
-  const [selectedFrd, setSelectedFrd] = useState({
-    email: "alvin.ipad2@gmail.com",
-    name: "Alvin Li",
-    photoURL: "",
-  });
+  const [selectedFrd, setSelectedFrd] = useState(null);
 
   useEffect(() => {
     db.collection("msgs")
@@ -89,28 +85,36 @@ function Chat() {
     <ChatContainer>
       <TopBar friend={selectedFrd} setSelectedFrd={setSelectedFrd} />
       <LeftWindow>
-        <FrdScreen setSelectedFrd={setSelectedFrd} messages={messages} />
+        <FrdScreen
+          setSelectedFrd={setSelectedFrd}
+          messages={messages}
+          selectedFrd={selectedFrd}
+        />
       </LeftWindow>
       <RightChatWindow>
         <JustChats>
-          {getMessagesFromFriend(selectedFrd.email).map(
-            ({ id, text, photoURL, uid }) => {
-              if (uid === auth.currentUser.uid) {
-                return (
-                  <SenderBubble>
-                    <MessageTxt>{text}</MessageTxt>
-                    <PersonPic src={photoURL} alt="" />
-                  </SenderBubble>
-                );
-              } else {
-                return (
-                  <ReceiverBubble>
-                    <PersonPic src={photoURL} alt="" />
-                    <MessageTxt>{text}</MessageTxt>
-                  </ReceiverBubble>
-                );
+          {selectedFrd ? (
+            getMessagesFromFriend(selectedFrd.email).map(
+              ({ id, text, photoURL, uid }) => {
+                if (uid === auth.currentUser.uid) {
+                  return (
+                    <SenderBubble>
+                      <MessageTxt>{text}</MessageTxt>
+                      <PersonPic src={photoURL} alt="" />
+                    </SenderBubble>
+                  );
+                } else {
+                  return (
+                    <ReceiverBubble>
+                      <PersonPic src={photoURL} alt="" />
+                      <MessageTxt>{text}</MessageTxt>
+                    </ReceiverBubble>
+                  );
+                }
               }
-            }
+            )
+          ) : (
+            <div>No Friend Chosen</div>
           )}
         </JustChats>
         <SendMessageBlock selectedFrd={selectedFrd} />
