@@ -13,20 +13,26 @@ import { storage } from '../firebase';
   // }
 
 
-async function SendMessage({ selectedFrd, msg, file }) {
+async function SendMessage({ selectedFrd, msg, files }) {
   const { uid, photoURL, displayName, email } = auth.currentUser;
-  let data = null
-  if (file) {
-    const storageRef = storage.ref()
-    const fileRef = storageRef.child(file.name)
-    console.log('working')
-    console.log(storageRef, fileRef)
-    data = fileRef.toString()
-    fileRef.put(file)
-    .then(()=> {
-      alert("Image uploaded")
-    })
+  let data = []
+  console.log(files)
+  if (files) {
+      for (let i = 0; i<files.length; i++) {
+        const storageRef = storage.ref()
+        const filesRef = storageRef.child(files[i].name)
+        console.log('working')
+        console.log(storageRef, filesRef)
+        data.push(filesRef.toString())
+        filesRef.put(files[i])
+        // .then(()=> {
+        //   alert("Image uploaded")
+        // })
+      }
+
   }
+
+
   // const data = new FormData()
   // data.append('file', file)
 

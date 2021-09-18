@@ -6,6 +6,7 @@ import SendIcon from "@mui/icons-material/Send";
 import styled from "styled-components";
 import { StyledButton } from "./StyledStuff";
 import { AttachFile } from "../AttachFile";
+import { Preview } from '../Preview';
 
 // const StyledPicButton = styled(StyledButton)`
 //   border-radius: 25px;
@@ -21,17 +22,21 @@ const StyledSendButton = styled(StyledButton)`
 
 function SendMessageBlock({ selectedFrd }) {
   const [msg, setMsg] = useState("");
-  const [file, setFile] = useState(null)
+  const [files, setFiles] = useState(null)
 
 
   async function sendMessage(e) {
     e.preventDefault();
-    await sendMessageUtils({ selectedFrd, msg, file });
+    await sendMessageUtils({ selectedFrd, msg, files });
     setMsg("");
   }
   const onInputChange = (e) => {
-    console.log(e.target.files)
-    setFile(e.target.files[0])
+    e.stopPropagation()
+    e.preventDefault()
+    const files = e.target.files
+    console.log(files)
+    setFiles(files)
+
   }
 
   // const onSubmit = (e) => {
@@ -53,6 +58,7 @@ function SendMessageBlock({ selectedFrd }) {
       <form method = "post" action='#' onSubmit={sendMessage}>
         <div className="sendMsg">
           <AttachFile callback = {onInputChange} />
+          <Preview files={files}/>
           <Input
             style={{
               width: "70%",
