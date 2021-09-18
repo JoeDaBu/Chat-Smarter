@@ -6,9 +6,27 @@ import { summarize } from "./AzureTextUtils";
 import styled from "styled-components";
 
 const StyledSummary = styled.div``;
-const StyledLink = styled.a``;
+
+const StyledLink = styled.a`
+  text-decoration: None;
+`;
+
+const StyledLinkContainer = styled.div`
+  margin: 10px 0;
+`;
+
 const StyledImg = styled.img`
   width: 300px;
+`;
+
+const StyledImgContainer = styled.div`
+  margin: auto;
+  padding: 20px;
+`;
+
+const StyledContent = styled(DialogContent)`
+  display: flex;
+  flex-direction: column;
 `;
 
 function DefinitionDialog({ info, isOpen, setIsOpen }) {
@@ -25,17 +43,21 @@ function DefinitionDialog({ info, isOpen, setIsOpen }) {
       .split(" ")
       .join("_")}`;
   }
-  summarize(extract).then((res) => setSummary(res));
+  summarize(extract).then((res) => setSummary(`${res.substr(0, 500)}...`));
 
   const handleClose = () => setIsOpen(false);
   return (
     <Dialog open={isOpen} onClose={handleClose}>
       <DialogTitle>{title}</DialogTitle>
-      <DialogContent>
-        <StyledImg src={imageSrc} />
+      <StyledContent>
+        <StyledImgContainer>
+          <StyledImg src={imageSrc} />
+        </StyledImgContainer>
         <StyledSummary>{summary ? summary : `Loading`}</StyledSummary>
-        <StyledLink href={fullurl}>{`See Wikipedia`}</StyledLink>
-      </DialogContent>
+        <StyledLinkContainer>
+          <StyledLink href={fullurl}>{`See Wikipedia`}</StyledLink>
+        </StyledLinkContainer>
+      </StyledContent>
     </Dialog>
   );
 }

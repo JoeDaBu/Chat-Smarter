@@ -54,7 +54,7 @@ function ChatMessages({ selectedFrd, messages }) {
         />
       )}
       {getMessagesFromFriend(selectedFrd.email).map(
-        ({ text, photoURL, uid }) => {
+        ({ text, photoURL, uid, keywords }) => {
           if (uid === auth.currentUser.uid) {
             return (
               <SenderBubble>
@@ -65,6 +65,7 @@ function ChatMessages({ selectedFrd, messages }) {
           } else {
             return (
               <RenderReceivedMessage
+                keywords={keywords}
                 setIsOpen={setIsOpen}
                 text={text}
                 photoURL={photoURL}

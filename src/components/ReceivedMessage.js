@@ -22,16 +22,17 @@ const SpecialMessageTxt = styled.div`
 `;
 
 function RenderReceivedMessage({
+  keywords,
   text,
   photoURL,
   setSelectedKeyword,
   setIsOpen,
 }) {
-  const [keywords, setKeywords] = useState([]);
-
-  useEffect(() => {
-    keyPhraseExtraction(text, setKeywords);
-  }, [text]);
+  // const [keywords, setKeywords] = useState([]);
+  //
+  // useEffect(() => {
+  //   keyPhraseExtraction(text, setKeywords);
+  // }, [text]);
 
   async function searchWiki(word) {
     const searchWord = word.split(" ").join("%20");
@@ -61,7 +62,7 @@ function RenderReceivedMessage({
     setIsOpen(true);
   }
 
-  if (keywords.length > 0) {
+  if (keywords && keywords.length > 0) {
     return (
       <ReceiverBubble>
         <PersonPic src={photoURL} alt="" />

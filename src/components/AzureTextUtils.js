@@ -12,13 +12,32 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export async function keyPhraseExtraction(text, setKeywords) {
+export async function keyPhraseExtraction(text) {
+  if (!text || text.length < 5) return [""];
   // const entityResults = await client.extractKeyPhrases(text);
   // return entityResults[0].keyPhrases;
-  await sleep(500);
+  // await sleep(200);
   if (text.toLowerCase().split(" ").includes("bitcoin")) {
-    setKeywords(["bitcoin"]);
+    return ["bitcoin"];
+    // setKeywords(["bitcoin"]);
   }
+  return [""];
+}
+
+export async function analyzeSentiment(text) {
+  if (text.length < 10000) return "neutral";
+
+  const sentimentInput = [text];
+  const sentimentResult = await client.analyzeSentiment(sentimentInput);
+  const scores = sentimentResult[0].confidenceScores;
+  if (scores.positive >= scores.neutral && scores.positive >= scores.negative)
+    return "positive";
+  else if (
+    scores.negative >= scores.neutral &&
+    scores.negative >= scores.positive
+  )
+    return "negative";
+  return "neutral";
 }
 
 export async function summarize(text) {
