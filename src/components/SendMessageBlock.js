@@ -24,7 +24,7 @@ function SendMessageBlock({ selectedFrd }) {
   const [isOpen, setIsOpen] = useState(false);
 
   async function sendMessage(e) {
-    e.preventDefault();
+    //e.preventDefault();
     await sendMessageUtils({ selectedFrd, msg, files, setFiles });
     setMsg("");
   }
@@ -34,7 +34,13 @@ function SendMessageBlock({ selectedFrd }) {
     const files = e.target.files;
     setFiles(files);
   };
-
+  async function submitTrip(s) {
+    //setMsg(s);
+    const newmessage = msg + "   " + s;
+    
+    await sendMessageUtils({ selectedFrd, msg: newmessage, files, setFiles });
+    setMsg("");
+  }
   return (
     <div>
       <div className="sendMsg">
@@ -42,7 +48,9 @@ function SendMessageBlock({ selectedFrd }) {
         <TripPlanner 
               isOpen={isOpen}
               setIsOpen={setIsOpen}
-              callback={setMsg} />
+              callback={submitTrip}
+              friend={selectedFrd}
+          />
         <Preview files={files} />
         <StyledForm method="post" action="#" onSubmit={sendMessage}>
           <Input

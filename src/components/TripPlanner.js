@@ -7,6 +7,8 @@ import { DateTimePicker } from '@mui/lab';
 import { StyledButton } from "./StyledStuff";
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import axios from "axios";
+import { auth } from "../firebase";
 
 
 export const StyledAddButton = styled(StyledButton)`
@@ -15,17 +17,16 @@ export const StyledAddButton = styled(StyledButton)`
   width: 50px;
 `;
 
-function TripPlanner({ isOpen, setIsOpen, callback }) {
+function TripPlanner({ isOpen, setIsOpen, callback, friend }) {
   const handleClose = () => setIsOpen(false);
   const [name, setName] = useState("");
   const [time, setTime] = useState(new Date());
   const [location, setLocation] = useState("");
   
-  function handlePlan(e) {
-    e.stopPropagation();
-   
+  async function handlePlan(e) {
+    //e.stopPropagation();
+    await axios.post("http://34.130.173.179/trip/", {time: time, location: location, sender: auth.currentUser.email, receiver: friend.email})
     callback("Trip name: " + name + "  Time: " + time.toString() + "  Location: " + location);
-
     setName("");
     setTime(new Date());
     setLocation("");
@@ -78,7 +79,7 @@ function TripPlanner({ isOpen, setIsOpen, callback }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handlePlan}>Plan the trip!</Button>
+          <Button type="submit" onClick={handlePlan}>Plan the trip!</Button>
         </DialogActions>
       </Dialog>
     </div>
