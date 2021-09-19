@@ -24,7 +24,7 @@ function SendMessageBlock({ selectedFrd }) {
   const [isOpen, setIsOpen] = useState(false);
 
   async function sendMessage(e) {
-    //e.preventDefault();
+    e.preventDefault();
     await sendMessageUtils({ selectedFrd, msg, files, setFiles });
     setMsg("");
   }
