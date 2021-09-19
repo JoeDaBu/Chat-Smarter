@@ -22,13 +22,10 @@ async function SendMessage({ selectedFrd, msg, files, setFiles }) {
   console.log(FILENAME);
   if (files) {
     for (let i = 0; i < files.length; i++) {
-      // await uploadData(files[i].name)
       const storageRef = storage.ref();
       const filesRef = storageRef.child(FILENAME);
       await filesRef.put(files[i]);
       const fileURL = await filesRef.getDownloadURL();
-      // const start = files[i].name.indexOf(".jpg");
-      // const end = files[i].name.indexOf(".png");
       landmark = await uploadData(FILENAME);
       landmark = landmark.data.result;
       const texts = await getOCR(fileURL);
@@ -54,7 +51,7 @@ async function SendMessage({ selectedFrd, msg, files, setFiles }) {
   const keywords = await keyPhraseExtraction(msg);
   const sentiment = await analyzeSentiment(msg);
 
-  const passMsg = msg ? msg : landmark ? landmark : "";
+  const passMsg = msg ? msg : " ";
 
   await db.collection("msgs").add({
     text: passMsg,

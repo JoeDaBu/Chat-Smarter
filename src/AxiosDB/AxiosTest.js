@@ -19,7 +19,7 @@ const fetchData = () => {
 
 export async function uploadData(filename) {
   console.log(filename);
-  const res = await axios.post("http://34.130.173.179/runeresult/", {
+  const res = await axios.post("http://34.130.89.27/runeresult/", {
     id: "",
     key: filename,
     result: "aaa",
