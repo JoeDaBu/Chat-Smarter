@@ -19,8 +19,8 @@ const NotSpecialWord = styled.div`
 const SpecialMessageTxt = styled.div`
   display: flex;
   border-radius: 5px;
-  padding: 10px 15px;
-  box-shadow: 1px 1px 2px 0 #0000002b;
+  padding: 15px 15px;
+  box-shadow: 1px 1px 2px .5px #0000002b;
 `;
 
 const IconContainer = styled.div`
@@ -34,11 +34,22 @@ const IconContainer = styled.div`
   cursor: pointer;
 `;
 
+const SentAtTxt = styled.div`
+  display: flex;
+  position: relative;
+  top: 30px;
+  margin-left: 10px;
+  bottom: 0px;
+  font-size: 10px;
+  
+`;
+
 function RenderReceivedMessage({
   sentiment,
   keywords,
   text,
   photoURL,
+  createdAt,
   setSelectedKeyword,
   setIsOpen,
   files,
@@ -78,19 +89,20 @@ function RenderReceivedMessage({
     setIsOpen(true);
   }
 
-  function matchKeywords(keywords, word) {
-    keywords.forEach((keyword) => {
-      // console.log(keyword, word);
-      // console.log(keyword.toLowerCase(), word.toLowerCase().trim());
-      // console.log(keyword.toLowerCase().includes(word.toLowerCase().trim()));
-      if (keyword.toLowerCase().includes(word.toLowerCase())) {
-        console.log("What ");
-        return true;
-        console.log("What");
-      }
-    });
-    return false;
-  }
+
+//   function matchKeywords(keywords, word) {
+//     keywords.forEach((keyword) => {
+//       // console.log(keyword, word);
+//       // console.log(keyword.toLowerCase(), word.toLowerCase().trim());
+//       // console.log(keyword.toLowerCase().includes(word.toLowerCase().trim()));
+//       if (keyword.toLowerCase().includes(word.toLowerCase())) {
+//         console.log("What ");
+//         return true;
+//         console.log("What");
+//       }
+//     });
+//     return false;
+//   }
 
   return (
     <ReceiverBubble>
@@ -127,6 +139,9 @@ function RenderReceivedMessage({
           })}
         {files && files.map((file) => <StyledChatImg src={file.url} />)}
       </SpecialMessageTxt>
+      <SentAtTxt>
+        {createdAt}
+      </SentAtTxt>
       {sentiment === "negative" && (
         <IconContainer onClick={() => setIsPuppyOpen(true)}>
           <SentimentDissatisfiedIcon fontSize="large" />
