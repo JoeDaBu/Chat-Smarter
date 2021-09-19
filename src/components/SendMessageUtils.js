@@ -8,27 +8,26 @@ import {
   getImageFeatures,
 } from "./AzureTextUtils";
 import { uploadData } from "../AxiosDB/AxiosTest";
+import { v4 as uuidv4 } from "uuid";
 
 async function SendMessage({ selectedFrd, msg, files, setFiles }) {
   if (!msg && !files) return;
   const { uid, photoURL, displayName, email } = auth.currentUser;
   let data = [];
+  let landmark = "";
+  const FILENAME = uuidv4().concat(".", files[0].name.split(".")[1]);
+  console.log(FILENAME);
   if (files) {
     for (let i = 0; i < files.length; i++) {
       // await uploadData(files[i].name)
       const storageRef = storage.ref();
-      const filesRef = storageRef.child(files[i].name);
+      const filesRef = storageRef.child(FILENAME);
       await filesRef.put(files[i]);
       const fileURL = await filesRef.getDownloadURL();
-      const start = files[i].name.indexOf(".jpg");
-      const end = files[i].name.indexOf(".png");
-
-      let landmark = "";
-      if (!(start !== -1 && end !== -1)) {
-        landmark = await uploadData(files[i].name);
-        landmark = landmark.data.result;
-      }
-
+      // const start = files[i].name.indexOf(".jpg");
+      // const end = files[i].name.indexOf(".png");
+      landmark = await uploadData(FILENAME);
+      landmark = landmark.data.result;
       const texts = await getOCR(fileURL);
 
       let extractedText = texts[0].lines.map((line) => line.text).join(" ");
@@ -41,19 +40,19 @@ async function SendMessage({ selectedFrd, msg, files, setFiles }) {
       // const tagsTexts = "";
       data.push({
         url: fileURL,
-        filename: files[i].name,
+        filename: FILENAME,
         tagsTexts,
         text: extractedText,
-        landmark,
+        landmark: landmark,
       });
     }
   }
 
   const keywords = await keyPhraseExtraction(msg);
   const sentiment = await analyzeSentiment(msg);
-
+  const passMsg = msg ? msg : landmark ? landmark : "";
   await db.collection("msgs").add({
-    text: msg,
+    text: passMsg,
     photoURL,
     uid,
     sentByName: displayName,
