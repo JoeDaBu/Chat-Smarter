@@ -108,13 +108,13 @@ function RenderReceivedMessage({
       <SpecialMessageTxt>
         {text &&
           text.split(" ").map((word, i) => {
-            if (keywords) {
-              console.log(
-                keywords
-                  .map((keyword) => keyword.toLowerCase())
-                  .includes(word.toLowerCase())
-              );
-            }
+            // if (keywords) {
+            //   console.log(
+            //     keywords
+            //       .map((keyword) => keyword.toLowerCase())
+            //       .includes(word.toLowerCase())
+            //   );
+            // }
             if (
               keywords &&
               keywords

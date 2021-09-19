@@ -83,11 +83,11 @@ function ChatMessages({ selectedFrd, messages }) {
       <PuppyDialog isPuppyOpen={isPuppyOpen} setIsPuppyOpen={setIsPuppyOpen} />
       {getMessagesFromFriend(selectedFrd.email).map(
         ({ text, photoURL, uid, keywords, sentiment, createdAt, files }, i) => {
-          console.log(createdAt)
+          // console.log(createdAt)
           let time = createdAt
           if (createdAt) {
             time = new Intl.DateTimeFormat('en-US', {month: 'short',day: '2-digit', hour: '2-digit', minute: '2-digit'}).format(createdAt['seconds']*1000);
-            console.log(time)
+            // console.log(time)
           }
           
           if (uid === auth.currentUser.uid) {
@@ -104,7 +104,7 @@ function ChatMessages({ selectedFrd, messages }) {
                 <MessageTxt>
                   {text && text}
                   {files &&
-                    files.map((file) => <StyledChatImg src={file.url} />)}
+                    files.map((file) => <StyledChatImg key={file.name} src={file.url} />)}
                 </MessageTxt>
                 <PersonPic src={photoURL} alt="" />
               </SenderBubble>

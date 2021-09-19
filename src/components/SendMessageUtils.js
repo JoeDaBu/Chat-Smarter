@@ -8,19 +8,25 @@ import {
   getImageFeatures,
 } from "./AzureTextUtils";
 
+// const fileURL = ''
+
 async function SendMessage({ selectedFrd, msg, files, setFiles }) {
   if (!msg && !files) return;
   const { uid, photoURL, displayName, email } = auth.currentUser;
   let data = [];
+  console.log('test2')
   if (files) {
     for (let i = 0; i < files.length; i++) {
       const storageRef = storage.ref();
       const filesRef = storageRef.child(files[i].name);
       await filesRef.put(files[i]);
       const fileURL = await filesRef.getDownloadURL();
+
       // const texts = await getOCR(fileURL);
       // const extractedText = texts[0].lines.map((line) => line.text).join(" ");
       // const tagsTexts = await getImageFeatures(fileURL);
+      console.log("test")
+      console.log(fileURL)
       const extractedText = "";
       const tagsTexts = "";
       data.push({
@@ -28,6 +34,7 @@ async function SendMessage({ selectedFrd, msg, files, setFiles }) {
         filename: files[i].name,
         text: extractedText.concat(" ", tagsTexts),
       });
+      console.log('test')
     }
   }
 
