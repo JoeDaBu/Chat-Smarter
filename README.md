@@ -2,7 +2,7 @@ ChatSmart
 
 `npm install` then `npm start`
 
-[Devport](https://devpost.com/software/chatsmart)
+[Devpost](https://devpost.com/software/chatsmart)
 
 ![Chat Screen](https://github.com/alvanli/ChatSmart/tree/main/pics/ChatScreen.png)
 ![Search within code](https://github.com/alvanli/ChatSmart/tree/main/pics/Code_Search.png)
