@@ -8,7 +8,9 @@ from psycopg2 import errorcodes
 import json
 import sys
 import time
-
+import subprocess
+from firebase import Firebase
+import os
 from .models import *
 
 # Warning: Do not use retry_on_exception in an inner nested transaction.
@@ -52,9 +54,25 @@ class RuneResultView(View):
     def post(self, request, *args, **kwargs):
         form_data = json.loads(request.body.decode())
         key, result = form_data['key'], form_data['result']
-        c = RuneResult(key=key, result=result)
+        print(os.getcwd())
+        config = {
+            "apiKey": os.getenv('REACT_APP_FIREBASE_API_KEY'),
+            "authDomain": os.getenv('REACT_APP_FIREBASE_AUTH_DOMAIN'),
+            "databaseURL": os.getenv('FIREBASE_URL'),
+            "storageBucket": os.getenv('REACT_APP_FIREBASE_STORAGE_BUCKET'),
+            "serviceAccount": os.getenv('SERVICE_ACCOUNT')
+        }
+        firebase = Firebase(config)
+        storage = firebase.storage()
+        storage.child(key).download(key)
+        batcmd = "rune run ChatApp.rune --image " + key
+        result=subprocess.getoutput(batcmd)
+        print(result)
+        res = result.split('\n')
+        landmark = res[-1][res[-1].index('["') + 2: res[-1].index('"]')]
+        c = RuneResult(key=key, result=landmark)
         c.save()
-        return HttpResponse(status=200)
+        return JsonResponse(list(RuneResult.objects.order_by('result').filter(key=key).values())[-1], safe=False)
 
 @method_decorator(csrf_exempt, name='dispatch')
 class TripView(View):

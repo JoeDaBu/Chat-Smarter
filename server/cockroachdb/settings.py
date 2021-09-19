@@ -12,7 +12,9 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 import os
 import dj_database_url
+from dotenv import load_dotenv
 
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -77,7 +79,7 @@ WSGI_APPLICATION = 'cockroachdb.wsgi.application'
 
 DATABASES = {}
 DATABASES['default'] = dj_database_url.config(default=os.path.expandvars(
-    'postgresql://alex:BOvWTf7HoF9K2oub@free-tier.gcp-us-central1.cockroachlabs.cloud:26257/defaultdb?sslmode=verify-full&sslrootcert=/home/alexyuanxinwang/.postgresql/root.crt&options=--cluster%3Ditchy-ape-3550'), engine='django_cockroachdb')
+    os.getenv('DB_URL_STRING')), engine='django_cockroachdb')
 
 
 # Password validation

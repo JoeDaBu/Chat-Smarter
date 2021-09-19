@@ -25,3 +25,5 @@ yarn-error.log*
 .idea
 __pycache__
 static
+cockroach-v21.1.7.linux-amd64
+chatapp-*.json
