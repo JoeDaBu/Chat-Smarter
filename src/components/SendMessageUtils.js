@@ -15,7 +15,10 @@ async function SendMessage({ selectedFrd, msg, files, setFiles }) {
   const { uid, photoURL, displayName, email } = auth.currentUser;
   let data = [];
   let landmark = "";
-  const FILENAME = uuidv4().concat(".", files[0].name.split(".")[1]);
+  const FILENAME =
+    files && files[0] && files[0].name
+      ? uuidv4().concat(".", files[0].name.split(".")[1])
+      : "";
   console.log(FILENAME);
   if (files) {
     for (let i = 0; i < files.length; i++) {
