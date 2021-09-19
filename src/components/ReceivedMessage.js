@@ -119,7 +119,7 @@ function RenderReceivedMessage({
               keywords &&
               keywords
                 .map((keyword) => keyword.toLowerCase())
-                .includes(word.toLowerCase())
+                .includes(word.toLowerCase().replace(".", ""))
             ) {
               return (
                 <StyledWordButton

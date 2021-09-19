@@ -39,10 +39,7 @@ function SendMessageBlock({ selectedFrd }) {
     <div>
       <div className="sendMsg">
         <AttachFile callback={onInputChange} />
-        <TripPlanner 
-              isOpen={isOpen}
-              setIsOpen={setIsOpen}
-              callback={setMsg} />
+        <TripPlanner isOpen={isOpen} setIsOpen={setIsOpen} callback={setMsg} />
         <Preview files={files} />
         <StyledForm method="post" action="#" onSubmit={sendMessage}>
           <Input
@@ -58,7 +55,6 @@ function SendMessageBlock({ selectedFrd }) {
             value={msg}
             onChange={(e) => setMsg(e.target.value)}
           />
-
           <StyledSendButton type="submit">
             <SendIcon />
           </StyledSendButton>
