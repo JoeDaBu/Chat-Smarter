@@ -98,7 +98,7 @@ function RenderReceivedMessage({
               );
             }
           })}
-        {files && files.map((file) => <StyledChatImg src={file} />)}
+        {files && files.map((file) => <StyledChatImg src={file.url} />)}
       </SpecialMessageTxt>
       {sentiment === "negative" && (
         <IconContainer onClick={() => setIsPuppyOpen(true)}>

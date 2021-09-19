@@ -12,7 +12,7 @@ async function SendMessage({ selectedFrd, msg, files, setFiles }) {
       const storageRef = storage.ref();
       const filesRef = storageRef.child(files[i].name);
       await filesRef.put(files[i]);
-      data.push(await filesRef.getDownloadURL());
+      data.push({ url: await filesRef.getDownloadURL() });
     }
   }
 

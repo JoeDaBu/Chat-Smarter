@@ -111,7 +111,6 @@ function FrdScreen({ setSelectedFrd, messages, selectedFrd }) {
   return (
     <div>
       {friends.map((friend, index) => {
-        console.log(friend);
         const msg = friend.read ? (
           <Message>{friend.message}</Message>
         ) : (

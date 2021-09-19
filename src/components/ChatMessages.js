@@ -63,7 +63,8 @@ function ChatMessages({ selectedFrd, messages }) {
               <SenderBubble key={`${i}`}>
                 <MessageTxt>
                   {text && text}
-                  {files && files.map((file) => <StyledChatImg src={file} />)}
+                  {files &&
+                    files.map((file) => <StyledChatImg src={file.url} />)}
                 </MessageTxt>
                 <PersonPic src={photoURL} alt="" />
               </SenderBubble>
