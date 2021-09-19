@@ -5,6 +5,7 @@ import RenderReceivedMessage from "./ReceivedMessage";
 import DefinitionDialog from "./DefinitionDialog";
 import PuppyDialog from "./PuppyDialog";
 import { StyledChatImg } from "./StyledStuff";
+import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied";
 
 export const PersonPic = styled.img`
   width: 40px;
@@ -27,6 +28,17 @@ export const MessageTxt = styled.div`
   border-radius: 5px;
   padding: 10px 15px;
   box-shadow: 1px 1px 2px 0 #0000002b;
+`;
+
+const IconContainer = styled.div`
+  position: relative;
+  left: 15px;
+  bottom: 10px;
+  background: white;
+  width: 35px;
+  height: 35px;
+  border-radius: 35px;
+  cursor: pointer;
 `;
 
 function ChatMessages({ selectedFrd, messages }) {
@@ -61,6 +73,11 @@ function ChatMessages({ selectedFrd, messages }) {
           if (uid === auth.currentUser.uid) {
             return (
               <SenderBubble key={`${i}`}>
+                {sentiment === "negative" && (
+                  <IconContainer onClick={() => setIsPuppyOpen(true)}>
+                    <SentimentDissatisfiedIcon fontSize="large" />
+                  </IconContainer>
+                )}
                 <MessageTxt>
                   {text && text}
                   {files &&
