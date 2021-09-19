@@ -35,6 +35,8 @@ export const ReceiverBubble = styled.div`
 
 export const MessageTxt = styled.div`
   border-radius: 5px;
+  display: flex;
+  flex-direction: column;
   padding: 10px 15px;
   box-shadow: 1px 1px 2px 0 #0000002b;
 `;
