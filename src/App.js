@@ -12,14 +12,8 @@ const StyledChat = styled(Chat)`
 
 function App() {
   const [user] = useAuthState(auth);
-  AxiosDB()
-  return (
-    <>
-      {user ? <StyledChat /> : <SignIn />}
-      {/* <AxiosDB /> */}
-    </>
-  )
-  // return <AxiosDB />
+  AxiosDB();
+  return <>{user ? <StyledChat /> : <SignIn />}</>;
 }
 
 export default App;

@@ -7,15 +7,12 @@ import {
   getOCR,
   getImageFeatures,
 } from "./AzureTextUtils";
-import AxiosDB, { uploadData } from "../AxiosDB/AxiosTest";
-
-// const fileURL = ''
+import { uploadData } from "../AxiosDB/AxiosTest";
 
 async function SendMessage({ selectedFrd, msg, files, setFiles }) {
   if (!msg && !files) return;
   const { uid, photoURL, displayName, email } = auth.currentUser;
   let data = [];
-  // console.log('test2')
   if (files) {
     for (let i = 0; i < files.length; i++) {
       // await uploadData(files[i].name)
@@ -23,29 +20,29 @@ async function SendMessage({ selectedFrd, msg, files, setFiles }) {
       const filesRef = storageRef.child(files[i].name);
       await filesRef.put(files[i]);
       const fileURL = await filesRef.getDownloadURL();
-      const start = files[i].name.indexOf('.jpg')
-      const end = files[i].name.indexOf('.png')
+      const start = files[i].name.indexOf(".jpg");
+      const end = files[i].name.indexOf(".png");
       // let filesApi = ''
+      let landmark = "";
       if (!(start !== -1 && end !== -1)) {
-        await uploadData(files[i].name)
+        landmark = await uploadData(files[i].name);
       }
-      
 
-      // const texts = await getOCR(fileURL);
-      // const extractedText = texts[0].lines.map((line) => line.text).join(" ");
-      // const tagsTexts = await getImageFeatures(fileURL);
-      console.log("test")
-      console.log(fileURL)
-      const extractedText = "";
-      const tagsTexts = "";
+      const texts = await getOCR(fileURL);
+      const extractedText = texts[0].lines.map((line) => line.text).join(" ");
+      const tagsTexts = await getImageFeatures(fileURL);
+      console.log("test");
+      console.log(fileURL);
+      // const extractedText = "";
+      // const tagsTexts = "";
       data.push({
         url: fileURL,
         filename: files[i].name,
-        text: extractedText.concat(" ", tagsTexts),
+        tagsTexts,
+        text: extractedText,
+        landmark,
       });
-      // console.log('test')
-    }  
-    // await AxiosDB(filts={true} data={toUpload})
+    }
   }
 
   const keywords = await keyPhraseExtraction(msg);
