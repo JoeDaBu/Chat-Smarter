@@ -6,6 +6,7 @@ import FrdScreen from "./FrdScreen";
 
 import styled from "styled-components";
 import ChatMessages from "./ChatMessages";
+import { EmojiObjectsOutlined } from "@mui/icons-material";
 
 const ChatContainer = styled.div`
   display: flex;
@@ -36,12 +37,16 @@ function Chat() {
 
   useEffect(() => {
     db.collection("msgs")
-      .orderBy("createdAt")
-      .limit(50)
+      .orderBy("createdAt", "desc")
+      .limit(500)
       .onSnapshot((snapshot) => {
         setMessages(
           snapshot.docs
-            .map((doc) => doc.data())
+            .map((doc) => {
+              var object = doc.data();
+              object.id = doc.id;
+              return object;
+            })
             .filter(
               (msg) =>
                 msg.sentToEmail === auth.currentUser.email ||

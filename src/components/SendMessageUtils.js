@@ -13,6 +13,7 @@ async function SendMessage({ selectedFrd, msg }) {
     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
     sentToName: selectedFrd.name,
     sentToEmail: selectedFrd.email,
+    read: false,
   });
 }
 

@@ -10,6 +10,9 @@ const EachFriend = styled.div`
 `;
 
 const Message = styled.div``;
+const UnreadMessage = styled.div`
+  font-weight: bold;
+`;
 
 const ProfilePhoto = styled.img`
   width: 45px;
@@ -66,6 +69,9 @@ function FrdScreen({ setSelectedFrd, messages, selectedFrd }) {
           newestMsgOverall[0].sentToEmail === email
             ? `You: ${newestMsgOverall[0].text}`
             : newestMsgOverall[0].text,
+        read: newestMsg.read,
+        id: newestMsg.id,
+        uid: newestMsg.uid,
       };
       tempFriends.push({ ...tempFriend });
     });
@@ -82,12 +88,20 @@ function FrdScreen({ setSelectedFrd, messages, selectedFrd }) {
   }, [messages]);
 
   function handleFriendClick(friend) {
+    //console.log(friend.id);
+
+    friend.read = true;
+    var friend2 = friend;
+    delete friend2.id;
+    db.collection("msgs").doc(friend.id).set(friend2);
     setSelectedFrd(friend);
   }
 
   return (
     <div>
       {friends.map((friend, index) => {
+        console.log(friend);
+        const msg = friend.read ? <Message>{friend.message}</Message> :<UnreadMessage>{friend.message}</UnreadMessage>;
         return (
           <EachFriend
             key={`friend${index}`}
@@ -96,7 +110,7 @@ function FrdScreen({ setSelectedFrd, messages, selectedFrd }) {
             <ProfilePhoto src={friend.photoURL} />
             <RightSide>
               <StyledName>{friend.name}</StyledName>
-              <Message>{friend.message}</Message>
+              {msg}
             </RightSide>
           </EachFriend>
         );
