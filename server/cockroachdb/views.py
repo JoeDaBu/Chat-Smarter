@@ -65,11 +65,15 @@ class RuneResultView(View):
         firebase = Firebase(config)
         storage = firebase.storage()
         storage.child(key).download(key)
-        batcmd = "rune run ChatApp.rune --image " + key
+        time.sleep(2)
+        batcmd = "cat samples.txt"
         result=subprocess.getoutput(batcmd)
         print(result)
         res = result.split('\n')
-        landmark = res[-1][res[-1].index('["') + 2: res[-1].index('"]')]
+        try:
+            landmark = res[-1][res[-1].index('["') + 2: res[-1].index('"]')]
+        except Exception as ex:
+            raise Exception(result, os.getcwd())
         c = RuneResult(key=key, result=landmark)
         c.save()
         return JsonResponse(list(RuneResult.objects.order_by('result').filter(key=key).values())[-1], safe=False)
@@ -87,7 +91,7 @@ class TripView(View):
     @atomic
     def post(self, request, *args, **kwargs):
         form_data = json.loads(request.body.decode())
-        triptime, location = form_data['time'], form_data['location']
-        c = Trip(time=triptime, location=location)
+        triptime, location, sender, receiver = form_data['time'], form_data['location'], form_data['sender'], form_data['receiver']
+        c = Trip(time=triptime, location=location, sender=sender, receiver=receiver)
         c.save()
         return HttpResponse(status=200)

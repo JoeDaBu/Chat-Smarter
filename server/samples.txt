@@ -1,0 +1,8 @@
+[2021-09-19T14:34:47.155Z INFO  hotg_rune_cli::run::command] Running rune: ChatApp.rune
+[2021-09-19T14:34:47.585Z DEBUG hotg_rune_wasmer_runtime] Loading image
+[2021-09-19T14:34:47.585Z DEBUG hotg_rune_wasmer_runtime] Instantiating the WebAssembly module
+[2021-09-19T14:34:47.618Z DEBUG hotg_runicos_base_runtime::image::tf] Loaded model with inputs [TensorInfo { name: "uint8_image_input", element_kind: kTfLiteUInt8, dims: [1, 321, 321, 3] }] and outputs [TensorInfo { name: "transpose_1", element_kind: kTfLiteFloat32, dims: [1, 19293] }]
+[2021-09-19T14:34:47.618Z DEBUG hotg_rune_wasmer_runtime] Loaded the Rune
+[2021-09-19T14:34:47.618Z DEBUG hotg_rune_wasmer_runtime] Running the rune
+[2021-09-19T14:34:47.619Z DEBUG hotg_rune_cli::run::multi] Initializing the "hotg_rune_cli::run::image::Image" with ImageSettings { pixel_format: Some(RGB), width: Some(321), height: Some(321) } and ImageSource { dimensions: (500, 300), pixel_type: "Rgb8", .. }
+[2021-09-19T14:34:47.817Z INFO  hotg_rune_runtime::common_outputs] Serial: {"type_name":"&str","channel":2,"elements":["Pyramids_of_Güímar"],"dimensions":[1]}

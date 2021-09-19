@@ -17,3 +17,5 @@ class Trip(models.Model):
         editable=False)
     time = models.CharField(max_length=250)
     location = models.CharField(max_length=250)
+    sender = models.CharField(max_length=250)
+    receiver = models.CharField(max_length=250)

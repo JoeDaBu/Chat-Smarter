@@ -9,3 +9,7 @@ gcloud
 sseclient
 pycrypto
 requests_toolbelt
+dj_database_url
+python-dotenv
+django_cockroachdb
+gunicorn
