@@ -27,8 +27,18 @@ function SearchDialog({
         (msg) =>
           msg.files &&
           msg.files[0] &&
-          msg.files[0].text &&
-          msg.files[0].text.toLowerCase().includes(searchWords.toLowerCase())
+          ((msg.files[0].text &&
+            msg.files[0].text
+              .toLowerCase()
+              .includes(searchWords.toLowerCase())) ||
+            (msg.files[0].landmark &&
+              msg.files[0].landmark
+                .toLowerCase()
+                .includes(searchWords.toLowerCase())) ||
+            (msg.files[0].tagsTexts &&
+              msg.files[0].tagsTexts
+                .toLowerCase()
+                .includes(searchWords.toLowerCase())))
       )
     );
 

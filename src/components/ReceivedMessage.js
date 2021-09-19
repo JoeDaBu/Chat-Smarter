@@ -2,7 +2,8 @@ import React from "react";
 import { MessageTxt, PersonPic, ReceiverBubble } from "./ChatMessages";
 import styled from "styled-components";
 import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied";
-import { StyledChatImg } from "./StyledStuff";
+import { StyledChatImg, StyledButton } from "./StyledStuff";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 const StyledWordButton = styled.div`
   padding-right: 4px;
@@ -83,6 +84,9 @@ function RenderReceivedMessage({
     }
   }
 
+  function handleCopy() {
+    navigator.clipboard.writeText(files[0].text);
+  }
   function handleSetKeyword(keyword) {
     searchWiki(keyword);
     setIsOpen(true);
@@ -108,17 +112,10 @@ function RenderReceivedMessage({
       <SpecialMessageTxt>
         {text &&
           text.split(" ").map((word, i) => {
-            if (keywords) {
-              console.log(
-                keywords
-                  .map((keyword) => keyword.toLowerCase())
-                  .includes(word.toLowerCase())
-              );
-            }
             if (
               keywords &&
               keywords
-                .map((keyword) => keyword.toLowerCase())
+                .map((keyword) => keyword.toLowerCase().replace(".", ""))
                 .includes(word.toLowerCase().replace(".", ""))
             ) {
               return (
@@ -142,6 +139,11 @@ function RenderReceivedMessage({
         <IconContainer onClick={() => setIsPuppyOpen(true)}>
           <SentimentDissatisfiedIcon fontSize="large" />
         </IconContainer>
+      )}
+      {files && files[0] && files[0].text && (
+        <StyledButton onClick={handleCopy}>
+          <ContentCopyIcon />
+        </StyledButton>
       )}
       <SentAtTxt>{createdAt}</SentAtTxt>
     </ReceiverBubble>

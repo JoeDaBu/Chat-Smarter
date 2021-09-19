@@ -21,7 +21,6 @@ const SentAtTxt = styled.div`
   margin-right: 10px;
   bottom: 0px;
   font-size: 10px;
-  
 `;
 
 export const SenderBubble = styled.div`
@@ -56,8 +55,6 @@ function ChatMessages({ selectedFrd, messages }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isPuppyOpen, setIsPuppyOpen] = useState(false);
 
-
-
   function getMessagesFromFriend(friendEmail) {
     const selectedMessages = messages.filter(
       (msg) =>
@@ -83,19 +80,21 @@ function ChatMessages({ selectedFrd, messages }) {
       <PuppyDialog isPuppyOpen={isPuppyOpen} setIsPuppyOpen={setIsPuppyOpen} />
       {getMessagesFromFriend(selectedFrd.email).map(
         ({ text, photoURL, uid, keywords, sentiment, createdAt, files }, i) => {
-          console.log(createdAt)
-          let time = createdAt
+          // console.log(createdAt)
+          let time = createdAt;
           if (createdAt) {
-            time = new Intl.DateTimeFormat('en-US', {month: 'short',day: '2-digit', hour: '2-digit', minute: '2-digit'}).format(createdAt['seconds']*1000);
-            console.log(time)
+            time = new Intl.DateTimeFormat("en-US", {
+              month: "short",
+              day: "2-digit",
+              hour: "2-digit",
+              minute: "2-digit",
+            }).format(createdAt["seconds"] * 1000);
           }
-          
+
           if (uid === auth.currentUser.uid) {
             return (
               <SenderBubble key={`${i}`}>
-                <SentAtTxt>
-                  {time}
-                </SentAtTxt>
+                <SentAtTxt>{time}</SentAtTxt>
                 {sentiment === "negative" && (
                   <IconContainer onClick={() => setIsPuppyOpen(true)}>
                     <SentimentDissatisfiedIcon fontSize="large" />
@@ -104,7 +103,9 @@ function ChatMessages({ selectedFrd, messages }) {
                 <MessageTxt>
                   {text && text}
                   {files &&
-                    files.map((file) => <StyledChatImg src={file.url} />)}
+                    files.map((file) => (
+                      <StyledChatImg key={file.name} src={file.url} />
+                    ))}
                 </MessageTxt>
                 <PersonPic src={photoURL} alt="" />
               </SenderBubble>
