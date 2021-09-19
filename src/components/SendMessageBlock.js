@@ -30,7 +30,6 @@ function SendMessageBlock({ selectedFrd }) {
     e.stopPropagation();
     e.preventDefault();
     const files = e.target.files;
-    console.log(files);
     setFiles(files);
   };
 
