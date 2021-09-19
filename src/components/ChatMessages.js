@@ -74,7 +74,7 @@ function ChatMessages({ selectedFrd, messages }) {
           console.log(createdAt)
           let time = createdAt
           if (createdAt) {
-            time = new Intl.DateTimeFormat('en-US', {year: 'numeric', month: 'short',day: '2-digit', hour: '2-digit', minute: '2-digit'}).format(createdAt['seconds']*1000);
+            time = new Intl.DateTimeFormat('en-US', {month: 'short',day: '2-digit', hour: '2-digit', minute: '2-digit'}).format(createdAt['seconds']*1000);
             console.log(time)
           }
           
