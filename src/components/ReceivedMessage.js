@@ -1,12 +1,8 @@
-import {
-  AzureKeyCredential,
-  TextAnalyticsClient,
-} from "@azure/ai-text-analytics";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { MessageTxt, PersonPic, ReceiverBubble } from "./ChatMessages";
 import styled from "styled-components";
-
-require("dotenv").config();
+import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied";
+import { StyledChatImg } from "./StyledStuff";
 
 const StyledWordButton = styled.div`
   :hover {
@@ -26,70 +22,89 @@ const SpecialMessageTxt = styled.div`
   box-shadow: 1px 1px 2px 0 #0000002b;
 `;
 
-function RenderReceivedMessage({ text, photoURL }) {
-  const [keywords, setKeywords] = useState([]);
+const IconContainer = styled.div`
+  position: relative;
+  right: 15px;
+  bottom: 15px;
+  background: white;
+  width: 35px;
+  height: 35px;
+  border-radius: 35px;
+  cursor: pointer;
+`;
 
-  const key = process.env.REACT_APP_AZURE_API_TEXT_KEY_1;
-  const endpoint = process.env.REACT_APP_AZURE_TEXT_ENDPOINT;
-  const client = new TextAnalyticsClient(endpoint, new AzureKeyCredential(key));
-
-  useEffect(() => {
-    keyPhraseExtraction(text);
-  }, [text]);
+function RenderReceivedMessage({
+  sentiment,
+  keywords,
+  text,
+  photoURL,
+  setSelectedKeyword,
+  setIsOpen,
+  files,
+  setIsPuppyOpen,
+}) {
+  // const [keywords, setKeywords] = useState([]);
+  //
+  // useEffect(() => {
+  //   keyPhraseExtraction(text, setKeywords);
+  // }, [text]);
 
   async function searchWiki(word) {
-    const headers = {
-      "Content-Type": "application/json",
-    };
     const searchWord = word.split(" ").join("%20");
     const page = await fetch(
-      `https://en.wikipedia.org/w/api.php?origin=*&action=query&list=search&srlimit=1&srsearch=${searchWord}&format=json`,
-      { headers }
+      `https://en.wikipedia.org/w/api.php?origin=*&action=query&list=search&srlimit=1&srsearch=${searchWord}&format=json`
     );
     const pageJson = await page.json();
     const pageId = pageJson.query.search[0].pageid;
-    const summaryPage = await fetch(
-      `https://en.wikipedia.org/w/api.php?origin=*&action=query&prop=extracts&exintro&explaintext&redirects=1&pageids=${pageId}&format=json`,
-      { headers }
-    );
+    // const altQuery = `https://en.wikipedia.org/w/api.php?origin=*&format=json&action=query&prop=pageimages&pithumbsize=500&redirects=1&pageids=${pageId}&format=json`;
+    const getInfoQuery = `https://en.wikipedia.org/w/api.php?origin=*&format=json&action=query&prop=extracts&exintro&explaintext&prop=pageimages%7Cinfo%7Cextracts&inprop=url&exintro&pithumbsize=500&redirects=1&pageids=${pageId}`;
+    const summaryPage = await fetch(getInfoQuery);
     const summaryJson = await summaryPage.json();
-    const extract = summaryJson.query.pages[`${pageId}`].extract;
-    return extract;
-  }
 
-  function sleep(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
-
-  async function keyPhraseExtraction(text) {
-    // const entityResults = await client.extractKeyPhrases(text);
-    // return entityResults[0].keyPhrases;
-    await sleep(500);
-    if (text.toLowerCase().split(" ").includes("bitcoin")) {
-      setKeywords(["bitcoin"]);
+    const info = summaryJson.query.pages[`${pageId}`];
+    if (!info.thumbnail) {
+      const getNewQuery = `https://en.wikipedia.org/w/api.php?origin=*&format=json&action=query&prop=extracts&exintro&explaintext&prop=images%7Cinfo%7Cextracts&inprop=url&imlimit=2&exintro&redirects=1&pageids=${pageId}&format=json`;
+      const newSum = await fetch(getNewQuery);
+      const newJson = await newSum.json();
+      setSelectedKeyword(newJson.query.pages[`${pageId}`]);
+    } else {
+      setSelectedKeyword(info);
     }
   }
-  if (keywords.length > 0) {
-    return (
-      <ReceiverBubble>
-        <PersonPic src={photoURL} alt="" />
-        <SpecialMessageTxt>
-          {text.split(" ").map((word) => {
-            if (keywords.includes(word.toLowerCase())) {
-              return <StyledWordButton>{`${word} `}</StyledWordButton>;
-            } else {
-              return <NotSpecialWord>{`${word} `}</NotSpecialWord>;
-            }
-          })}
-        </SpecialMessageTxt>
-      </ReceiverBubble>
-    );
+
+  function handleSetKeyword(keyword) {
+    searchWiki(keyword);
+    setIsOpen(true);
   }
 
   return (
     <ReceiverBubble>
       <PersonPic src={photoURL} alt="" />
-      <MessageTxt>{text}</MessageTxt>
+      <SpecialMessageTxt>
+        {text &&
+          text.split(" ").map((word, i) => {
+            if (keywords && keywords.includes(word.toLowerCase())) {
+              return (
+                <StyledWordButton
+                  key={`${i} ${word}`}
+                  onClick={() => handleSetKeyword(word)}
+                >{`${word} `}</StyledWordButton>
+              );
+            } else {
+              return (
+                <NotSpecialWord
+                  key={`${i} ${word}`}
+                >{`${word} `}</NotSpecialWord>
+              );
+            }
+          })}
+        {files && files.map((file) => <StyledChatImg src={file} />)}
+      </SpecialMessageTxt>
+      {sentiment === "negative" && (
+        <IconContainer onClick={() => setIsPuppyOpen(true)}>
+          <SentimentDissatisfiedIcon fontSize="large" />
+        </IconContainer>
+      )}
     </ReceiverBubble>
   );
 }
