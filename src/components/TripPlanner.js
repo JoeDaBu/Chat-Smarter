@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-
 import { Dialog, DialogTitle, DialogActions, TextField } from '@mui/material';
-
 import styled from "styled-components";
 import { Button, DialogContent } from "@material-ui/core";
-import AddBox from "@mui/icons-material/Image";
-import DateTimePicker from 'react-datetime-picker'
+import { AddBox } from "@mui/icons-material";
+import { DateTimePicker } from '@mui/lab';
 import { StyledButton } from "./StyledStuff";
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
 
 
 export const StyledAddButton = styled(StyledButton)`
@@ -24,7 +24,7 @@ function TripPlanner({ isOpen, setIsOpen, callback }) {
   function handlePlan(e) {
     e.stopPropagation();
    
-    callback("Trip name: " + this.state.name + "\nTime: " + this.state.time + "\nLocation: " + this.state.location);
+    callback("Trip name: " + name + "  Time: " + time.toString() + "  Location: " + location);
 
     setName("");
     setTime(new Date());
@@ -39,7 +39,7 @@ function TripPlanner({ isOpen, setIsOpen, callback }) {
     // }}>
     <div>
 
-      <StyledAddButton>
+      <StyledAddButton onClick={() => setIsOpen(true)}>
         <AddBox />
       </StyledAddButton>
       <Dialog open={isOpen} onClose={handleClose} modal={true}>
@@ -48,29 +48,31 @@ function TripPlanner({ isOpen, setIsOpen, callback }) {
           <TextField
             autoFocus
             required
-            margin="dense"
+            margin="normal"
             id="name"
             label="Name"
             fullWidth
-            variant="standard"
+            variant="outlined"
             onChange={(e) => setName(e.target.value)}
           />
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+
           <DateTimePicker
             required
-            margin="dense"
+            margin="normal"
             id="time"
             label="Date and Time"
-            fullWidth
-            variant="standard"
             onChange={(e) => setTime(e.target.value)}
+            renderInput={(params) => <TextField {...params} />}
           />
+          </LocalizationProvider>
           <TextField
             required
-            margin="dense"
+            margin="normal"
             id="location"
             label="Location"
             fullWidth
-            variant="standard"
+            variant="outlined"
             onChange={(e) => setLocation(e.target.value)}
           />
         </DialogContent>

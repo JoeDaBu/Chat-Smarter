@@ -42,7 +42,7 @@ function SendMessageBlock({ selectedFrd }) {
         <TripPlanner 
               isOpen={isOpen}
               setIsOpen={setIsOpen}
-              callback={(e) => setMsg(e.target.value)} />
+              callback={setMsg} />
         <Preview files={files} />
         <StyledForm method="post" action="#" onSubmit={sendMessage}>
           <Input
