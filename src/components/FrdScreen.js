@@ -96,7 +96,8 @@ function FrdScreen({ setSelectedFrd, messages, selectedFrd }) {
   }, [messages]);
 
   function handleFriendClick(friend) {
-    db.collection("msgs")
+    if(!friend.read){
+      db.collection("msgs")
       .where("sentByEmail", "==", friend.email)
       .get()
       .then((querySnapshot) => {
@@ -104,7 +105,7 @@ function FrdScreen({ setSelectedFrd, messages, selectedFrd }) {
           db.collection("msgs").doc(doc.id).update({ read: true });
         });
       });
-
+    }
     setSelectedFrd(friend);
   }
 

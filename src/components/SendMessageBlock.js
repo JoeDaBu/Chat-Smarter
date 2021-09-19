@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Input, Button } from "@material-ui/core";
 import sendMessageUtils from "./SendMessageUtils";
+import TripPlanner from "./TripPlanner";
 import SendIcon from "@mui/icons-material/Send";
 import styled from "styled-components";
 import { StyledButton } from "./StyledStuff";
@@ -20,6 +21,7 @@ const StyledForm = styled.form`
 function SendMessageBlock({ selectedFrd }) {
   const [msg, setMsg] = useState("");
   const [files, setFiles] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
 
   async function sendMessage(e) {
     e.preventDefault();
@@ -32,11 +34,23 @@ function SendMessageBlock({ selectedFrd }) {
     const files = e.target.files;
     setFiles(files);
   };
-
+  async function submitTrip(s) {
+    //setMsg(s);
+    const newmessage = msg + "   " + s;
+    
+    await sendMessageUtils({ selectedFrd, msg: newmessage, files, setFiles });
+    setMsg("");
+  }
   return (
     <div>
       <div className="sendMsg">
         <AttachFile callback={onInputChange} />
+        <TripPlanner 
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+              callback={submitTrip}
+              friend={selectedFrd}
+          />
         <Preview files={files} />
         <StyledForm method="post" action="#" onSubmit={sendMessage}>
           <Input
@@ -52,7 +66,6 @@ function SendMessageBlock({ selectedFrd }) {
             value={msg}
             onChange={(e) => setMsg(e.target.value)}
           />
-
           <StyledSendButton type="submit">
             <SendIcon />
           </StyledSendButton>

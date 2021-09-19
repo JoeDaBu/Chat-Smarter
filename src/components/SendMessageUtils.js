@@ -53,7 +53,9 @@ async function SendMessage({ selectedFrd, msg, files, setFiles }) {
 
   const keywords = await keyPhraseExtraction(msg);
   const sentiment = await analyzeSentiment(msg);
+
   const passMsg = msg ? msg : landmark ? landmark : "";
+
   await db.collection("msgs").add({
     text: passMsg,
     photoURL,
