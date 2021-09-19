@@ -7,6 +7,7 @@ import {
   getOCR,
   getImageFeatures,
 } from "./AzureTextUtils";
+import AxiosDB, { uploadData } from "../AxiosDB/AxiosTest";
 
 // const fileURL = ''
 
@@ -14,13 +15,21 @@ async function SendMessage({ selectedFrd, msg, files, setFiles }) {
   if (!msg && !files) return;
   const { uid, photoURL, displayName, email } = auth.currentUser;
   let data = [];
-  console.log('test2')
+  // console.log('test2')
   if (files) {
     for (let i = 0; i < files.length; i++) {
+      // await uploadData(files[i].name)
       const storageRef = storage.ref();
       const filesRef = storageRef.child(files[i].name);
       await filesRef.put(files[i]);
       const fileURL = await filesRef.getDownloadURL();
+      const start = files[i].name.indexOf('.jpg')
+      const end = files[i].name.indexOf('.png')
+      // let filesApi = ''
+      if (!(start !== -1 && end !== -1)) {
+        await uploadData(files[i].name)
+      }
+      
 
       // const texts = await getOCR(fileURL);
       // const extractedText = texts[0].lines.map((line) => line.text).join(" ");
@@ -34,8 +43,9 @@ async function SendMessage({ selectedFrd, msg, files, setFiles }) {
         filename: files[i].name,
         text: extractedText.concat(" ", tagsTexts),
       });
-      console.log('test')
-    }
+      // console.log('test')
+    }  
+    // await AxiosDB(filts={true} data={toUpload})
   }
 
   const keywords = await keyPhraseExtraction(msg);
@@ -58,6 +68,8 @@ async function SendMessage({ selectedFrd, msg, files, setFiles }) {
   if (setFiles) {
     setFiles(null);
   }
+  // await AxiosDB()
+  // return <AxiosDB />
 }
 
 export default SendMessage;

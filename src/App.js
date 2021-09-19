@@ -11,9 +11,15 @@ const StyledChat = styled(Chat)`
 `;
 
 function App() {
-  // const [user] = useAuthState(auth);
-  // return <>{user ? <StyledChat /> : <SignIn />}</>;
-  return <AxiosDB />
+  const [user] = useAuthState(auth);
+  AxiosDB()
+  return (
+    <>
+      {user ? <StyledChat /> : <SignIn />}
+      {/* <AxiosDB /> */}
+    </>
+  )
+  // return <AxiosDB />
 }
 
 export default App;
