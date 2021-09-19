@@ -8,8 +8,8 @@ const fetchData = () => {
   return axios
     .get("http://34.130.173.179/runeresult/")
     .then((res) => {
-      console.log("data", res.data);
-      console.log(typeof res);
+      // console.log("data", res.data);
+      // console.log(typeof res);
       return res.data;
     })
     .catch((err) => {
@@ -17,25 +17,19 @@ const fetchData = () => {
     });
 };
 
-export const uploadData = (data) => {
+export async function uploadData(data) {
   for (let i = 0; i < data.length; i++) {
-    axios
-      .post("http://34.130.173.179/runeresult/", {
-        id: "",
-        key: data[i],
-        result: "",
-      })
-      .then((res) => {
-        return res;
-      });
+    const res = await axios.post("http://34.130.173.179/runeresult/", {
+      id: "",
+      key: data[i],
+      result: "",
+    });
+    return res;
   }
-};
+}
 
 const AxiosDB = () => {
-  // let [fileNames, setFileNames] = useState([])
-
   useEffect(() => {
-    console.log("running");
     fetchData().then(async (files) => {
       if (files.length === 0) {
         return;
@@ -73,7 +67,7 @@ const AxiosDB = () => {
       let filesApi = "";
       if (start !== -1 && end !== -1) {
         filesApi = dbFiles[i].substring(start + 3, end);
-        console.log(filesApi);
+        // console.log(filesApi);
         if (!fileNames.includes(filesApi)) {
           toUpload.push(filesApi);
         }

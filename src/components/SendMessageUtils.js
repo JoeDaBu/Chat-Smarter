@@ -22,17 +22,21 @@ async function SendMessage({ selectedFrd, msg, files, setFiles }) {
       const fileURL = await filesRef.getDownloadURL();
       const start = files[i].name.indexOf(".jpg");
       const end = files[i].name.indexOf(".png");
-      // let filesApi = ''
+
       let landmark = "";
       if (!(start !== -1 && end !== -1)) {
         landmark = await uploadData(files[i].name);
+        landmark = landmark.data.result;
       }
 
       const texts = await getOCR(fileURL);
-      const extractedText = texts[0].lines.map((line) => line.text).join(" ");
-      const tagsTexts = await getImageFeatures(fileURL);
-      console.log("test");
-      console.log(fileURL);
+
+      let extractedText = texts[0].lines.map((line) => line.text).join(" ");
+      let tagsTexts = await getImageFeatures(fileURL);
+      console.log(landmark, extractedText, tagsTexts);
+      if (!landmark || typeof landmark !== "string") landmark = "";
+      if (!extractedText) extractedText = "";
+      if (!tagsTexts) tagsTexts = "";
       // const extractedText = "";
       // const tagsTexts = "";
       data.push({
