@@ -1,32 +1,21 @@
 import { db, auth } from "../firebase";
 import firebase from "firebase";
-import { storage } from '../firebase';
+import { storage } from "../firebase";
 import { analyzeSentiment, keyPhraseExtraction } from "./AzureTextUtils";
 
-
-
-async function SendMessage({ selectedFrd, msg, files }) {
+async function SendMessage({ selectedFrd, msg, files, setFiles }) {
+  if (!msg && !files) return;
   const { uid, photoURL, displayName, email } = auth.currentUser;
-  let data = []
-  console.log(files)
+  let data = [];
+  console.log(files);
   if (files) {
-      for (let i = 0; i<files.length; i++) {
-        const storageRef = storage.ref()
-        const filesRef = storageRef.child(files[i].name)
-        console.log('working')
-        console.log(storageRef, filesRef)
-        data.push(filesRef.toString())
-        filesRef.put(files[i])
-        // .then(()=> {
-        //   alert("Image uploaded")
-        // })
-      }
-
+    for (let i = 0; i < files.length; i++) {
+      const storageRef = storage.ref();
+      const filesRef = storageRef.child(files[i].name);
+      await filesRef.put(files[i]);
+      data.push(await filesRef.getDownloadURL());
+    }
   }
-
-
-  // const data = new FormData()
-  // data.append('file', file)
 
   const keywords = await keyPhraseExtraction(msg);
   const sentiment = await analyzeSentiment(msg);
@@ -44,6 +33,9 @@ async function SendMessage({ selectedFrd, msg, files }) {
     sentToEmail: selectedFrd.email,
     files: data,
   });
+  if (setFiles) {
+    setFiles(null);
+  }
 }
 
 export default SendMessage;

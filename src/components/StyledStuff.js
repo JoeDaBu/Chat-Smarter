@@ -9,4 +9,8 @@ const StyledButton = styled.button`
   }
 `;
 
-export { StyledButton };
+const StyledChatImg = styled.img`
+  height: 150px;
+`;
+
+export { StyledButton, StyledChatImg };

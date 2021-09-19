@@ -1,20 +1,29 @@
-import React from 'react'
-import image from '../Flag.png'
+import React from "react";
+import styled from "styled-components";
 
-export const Preview = ({files}) => {
+const PreviewContainer = styled.div`
+  position: absolute;
+  bottom: 100px;
+  display: flex;
+`;
+
+const StyledImg = styled.img`
+  height: 100px;
+`;
+
+export const Preview = ({ files }) => {
   if (!files) {
-    return null
+    return null;
   }
-  let images = []
+  let images = [];
   for (let i = 0; i < files.length; i++) {
-    images.push(<img width='200px' height='200px' key={i} src={URL.createObjectURL(files[i])} alt={files[i].originalname}/>)
+    images.push(
+      <StyledImg
+        key={i}
+        src={URL.createObjectURL(files[i])}
+        alt={files[i].originalname}
+      />
+    );
   }
-  console.log(images)
-  return (
-    // files.map((file) => <img src={file.filename} alt={file.originalname} />
-    // Array.from(files).forEach(file => <img src={file.filename} alt={file.originalname}/>)
-    
-    images
-  );
-}
-
+  return <PreviewContainer>{images}</PreviewContainer>;
+};
