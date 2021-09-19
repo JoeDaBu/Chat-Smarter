@@ -4,6 +4,7 @@ import styled from "styled-components";
 import RenderReceivedMessage from "./ReceivedMessage";
 import DefinitionDialog from "./DefinitionDialog";
 import PuppyDialog from "./PuppyDialog";
+import { StyledChatImg } from "./StyledStuff";
 
 export const PersonPic = styled.img`
   width: 40px;
@@ -41,6 +42,7 @@ function ChatMessages({ selectedFrd, messages }) {
         (msg.sentByEmail === auth.currentUser.email &&
           msg.sentToEmail === friendEmail)
     );
+    console.log(selectedMessages);
     return selectedMessages.sort((a, b) => {
       return a.createdAt - b.createdAt;
     });
@@ -56,11 +58,14 @@ function ChatMessages({ selectedFrd, messages }) {
       )}
       <PuppyDialog isPuppyOpen={isPuppyOpen} setIsPuppyOpen={setIsPuppyOpen} />
       {getMessagesFromFriend(selectedFrd.email).map(
-        ({ text, photoURL, uid, keywords, sentiment }, i) => {
+        ({ text, photoURL, uid, keywords, sentiment, files }, i) => {
           if (uid === auth.currentUser.uid) {
             return (
               <SenderBubble key={`${i}`}>
-                <MessageTxt>{text}</MessageTxt>
+                <MessageTxt>
+                  {text && text}
+                  {files && files.map((file) => <StyledChatImg src={file} />)}
+                </MessageTxt>
                 <PersonPic src={photoURL} alt="" />
               </SenderBubble>
             );
@@ -68,6 +73,7 @@ function ChatMessages({ selectedFrd, messages }) {
             return (
               <RenderReceivedMessage
                 key={`${text} ${i}`}
+                files={files}
                 setIsPuppyOpen={setIsPuppyOpen}
                 sentiment={sentiment}
                 keywords={keywords}

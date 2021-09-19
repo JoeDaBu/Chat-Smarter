@@ -37,6 +37,11 @@ function FrdScreen({ setSelectedFrd, messages, selectedFrd }) {
         messages
           .map((msg) => msg.sentByEmail)
           .filter((email) => email !== auth.currentUser.email)
+          .concat(
+            messages
+              .map((msg) => msg.sentToEmail)
+              .filter((email) => email !== auth.currentUser.email)
+          )
       ),
     ];
 
@@ -52,22 +57,25 @@ function FrdScreen({ setSelectedFrd, messages, selectedFrd }) {
         .sort((a, b) => {
           return b.createdAt - a.createdAt;
         });
+
       const newestMsg = newestMsgOverall
         .filter((msg) => msg.sentByEmail === email)
         .sort((a, b) => {
           return b.createdAt - a.createdAt;
         })[0];
-      const tempFriend = {
-        name: newestMsg.sentByName,
-        email: newestMsg.sentByEmail,
-        createdAt: newestMsg.createdAt,
-        photoURL: newestMsg.photoURL,
-        message:
-          newestMsgOverall[0].sentToEmail === email
-            ? `You: ${newestMsgOverall[0].text}`
-            : newestMsgOverall[0].text,
-      };
-      tempFriends.push({ ...tempFriend });
+      if (newestMsg) {
+        const tempFriend = {
+          name: newestMsg.sentByName,
+          email: newestMsg.sentByEmail,
+          createdAt: newestMsg.createdAt,
+          photoURL: newestMsg.photoURL,
+          message:
+            newestMsgOverall[0].sentToEmail === email
+              ? `You: ${newestMsgOverall[0].text}`
+              : newestMsgOverall[0].text,
+        };
+        tempFriends.push({ ...tempFriend });
+      }
     });
 
     if (!selectedFrd) {

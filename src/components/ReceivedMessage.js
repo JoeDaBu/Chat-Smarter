@@ -2,6 +2,7 @@ import React from "react";
 import { MessageTxt, PersonPic, ReceiverBubble } from "./ChatMessages";
 import styled from "styled-components";
 import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied";
+import { StyledChatImg } from "./StyledStuff";
 
 const StyledWordButton = styled.div`
   :hover {
@@ -39,6 +40,7 @@ function RenderReceivedMessage({
   photoURL,
   setSelectedKeyword,
   setIsOpen,
+  files,
   setIsPuppyOpen,
 }) {
   // const [keywords, setKeywords] = useState([]);
@@ -79,20 +81,24 @@ function RenderReceivedMessage({
     <ReceiverBubble>
       <PersonPic src={photoURL} alt="" />
       <SpecialMessageTxt>
-        {text.split(" ").map((word, i) => {
-          if (keywords && keywords.includes(word.toLowerCase())) {
-            return (
-              <StyledWordButton
-                key={`${i} ${word}`}
-                onClick={() => handleSetKeyword(word)}
-              >{`${word} `}</StyledWordButton>
-            );
-          } else {
-            return (
-              <NotSpecialWord key={`${i} ${word}`}>{`${word} `}</NotSpecialWord>
-            );
-          }
-        })}
+        {text &&
+          text.split(" ").map((word, i) => {
+            if (keywords && keywords.includes(word.toLowerCase())) {
+              return (
+                <StyledWordButton
+                  key={`${i} ${word}`}
+                  onClick={() => handleSetKeyword(word)}
+                >{`${word} `}</StyledWordButton>
+              );
+            } else {
+              return (
+                <NotSpecialWord
+                  key={`${i} ${word}`}
+                >{`${word} `}</NotSpecialWord>
+              );
+            }
+          })}
+        {files && files.map((file) => <StyledChatImg src={file} />)}
       </SpecialMessageTxt>
       {sentiment === "negative" && (
         <IconContainer onClick={() => setIsPuppyOpen(true)}>

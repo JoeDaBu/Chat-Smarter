@@ -1,9 +1,21 @@
 import { db, auth } from "../firebase";
 import firebase from "firebase";
+import { storage } from "../firebase";
 import { analyzeSentiment, keyPhraseExtraction } from "./AzureTextUtils";
 
-async function SendMessage({ selectedFrd, msg }) {
+async function SendMessage({ selectedFrd, msg, files, setFiles }) {
+  if (!msg && !files) return;
   const { uid, photoURL, displayName, email } = auth.currentUser;
+  let data = [];
+  console.log(files);
+  if (files) {
+    for (let i = 0; i < files.length; i++) {
+      const storageRef = storage.ref();
+      const filesRef = storageRef.child(files[i].name);
+      await filesRef.put(files[i]);
+      data.push(await filesRef.getDownloadURL());
+    }
+  }
 
   const keywords = await keyPhraseExtraction(msg);
   const sentiment = await analyzeSentiment(msg);
@@ -19,7 +31,11 @@ async function SendMessage({ selectedFrd, msg }) {
     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
     sentToName: selectedFrd.name,
     sentToEmail: selectedFrd.email,
+    files: data,
   });
+  if (setFiles) {
+    setFiles(null);
+  }
 }
 
 export default SendMessage;
