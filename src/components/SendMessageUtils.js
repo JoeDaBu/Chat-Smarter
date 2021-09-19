@@ -1,7 +1,12 @@
 import { db, auth } from "../firebase";
 import firebase from "firebase";
 import { storage } from "../firebase";
-import { analyzeSentiment, keyPhraseExtraction } from "./AzureTextUtils";
+import {
+  analyzeSentiment,
+  keyPhraseExtraction,
+  getOCR,
+  getImageFeatures,
+} from "./AzureTextUtils";
 
 async function SendMessage({ selectedFrd, msg, files, setFiles }) {
   if (!msg && !files) return;
@@ -12,7 +17,17 @@ async function SendMessage({ selectedFrd, msg, files, setFiles }) {
       const storageRef = storage.ref();
       const filesRef = storageRef.child(files[i].name);
       await filesRef.put(files[i]);
-      data.push({ url: await filesRef.getDownloadURL() });
+      const fileURL = await filesRef.getDownloadURL();
+      // const texts = await getOCR(fileURL);
+      // const extractedText = texts[0].lines.map((line) => line.text).join(" ");
+      // const tagsTexts = await getImageFeatures(fileURL);
+      const extractedText = "";
+      const tagsTexts = "";
+      data.push({
+        url: fileURL,
+        filename: files[i].name,
+        text: extractedText.concat(" ", tagsTexts),
+      });
     }
   }
 

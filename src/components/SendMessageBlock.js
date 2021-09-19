@@ -66,7 +66,6 @@ function SendMessageBlock({ selectedFrd }) {
             value={msg}
             onChange={(e) => setMsg(e.target.value)}
           />
-
           <StyledSendButton type="submit">
             <SendIcon />
           </StyledSendButton>
