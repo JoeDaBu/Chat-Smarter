@@ -42,7 +42,6 @@ function ChatMessages({ selectedFrd, messages }) {
         (msg.sentByEmail === auth.currentUser.email &&
           msg.sentToEmail === friendEmail)
     );
-    console.log(selectedMessages);
     return selectedMessages.sort((a, b) => {
       return a.createdAt - b.createdAt;
     });

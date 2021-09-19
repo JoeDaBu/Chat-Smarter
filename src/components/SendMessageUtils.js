@@ -7,7 +7,6 @@ async function SendMessage({ selectedFrd, msg, files, setFiles }) {
   if (!msg && !files) return;
   const { uid, photoURL, displayName, email } = auth.currentUser;
   let data = [];
-  console.log(files);
   if (files) {
     for (let i = 0; i < files.length; i++) {
       const storageRef = storage.ref();
