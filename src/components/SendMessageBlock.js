@@ -13,9 +13,14 @@ const StyledPicButton = styled(StyledButton)`
 `;
 
 const StyledSendButton = styled(StyledButton)`
+  position: absolute;
+  right: 70px;
   width: 50px;
   height: 50px;
   border-radius: 50px;
+  @media (max-width: 900px) {
+    right: 50px;
+  }
 `;
 
 function SendMessageBlock({ selectedFrd }) {
@@ -36,10 +41,11 @@ function SendMessageBlock({ selectedFrd }) {
           </StyledPicButton>
           <Input
             style={{
-              width: "70%",
+              width: "calc(90% - 100px)",
               fontSize: "15px",
               fontWeight: "550",
               marginLeft: "5px",
+              marginRight: '50px',
               marginBottom: "-3px",
             }}
             placeholder="Message..."
