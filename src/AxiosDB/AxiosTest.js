@@ -17,15 +17,15 @@ const fetchData = () => {
     });
 };
 
-export async function uploadData(data) {
-  for (let i = 0; i < data.length; i++) {
-    const res = await axios.post("http://34.130.173.179/runeresult/", {
-      id: "",
-      key: data[i],
-      result: "",
-    });
-    return res;
-  }
+export async function uploadData(filename) {
+  console.log(filename);
+  const res = await axios.post("http://34.130.173.179/runeresult/", {
+    id: "",
+    key: filename,
+    result: "aaa",
+  });
+  console.log(res);
+  return res;
 }
 
 const AxiosDB = () => {
