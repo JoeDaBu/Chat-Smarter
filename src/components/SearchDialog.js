@@ -17,9 +17,20 @@ function SearchDialog({
   setSearchWords,
   selectedFrd,
 }) {
-  const filteredMessages = messages.filter((msg) =>
-    msg.text.toLowerCase().includes(searchWords.toLowerCase())
-  );
+  const filteredMessages = messages
+    .filter(
+      (msg) =>
+        msg.text && msg.text.toLowerCase().includes(searchWords.toLowerCase())
+    )
+    .concat(
+      messages.filter(
+        (msg) =>
+          msg.files &&
+          msg.files[0] &&
+          msg.files[0].text &&
+          msg.files[0].text.toLowerCase().includes(searchWords.toLowerCase())
+      )
+    );
 
   function handleClose() {
     setIsSearchOpen(false);

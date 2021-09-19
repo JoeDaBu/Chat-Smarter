@@ -5,6 +5,7 @@ import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied
 import { StyledChatImg } from "./StyledStuff";
 
 const StyledWordButton = styled.div`
+  padding-right: 4px;
   :hover {
     font-weight: bold;
     cursor: pointer;
@@ -87,14 +88,41 @@ function RenderReceivedMessage({
     searchWiki(keyword);
     setIsOpen(true);
   }
-  // console.log(typeof createdAt)
+
+
+//   function matchKeywords(keywords, word) {
+//     keywords.forEach((keyword) => {
+//       // console.log(keyword, word);
+//       // console.log(keyword.toLowerCase(), word.toLowerCase().trim());
+//       // console.log(keyword.toLowerCase().includes(word.toLowerCase().trim()));
+//       if (keyword.toLowerCase().includes(word.toLowerCase())) {
+//         console.log("What ");
+//         return true;
+//         console.log("What");
+//       }
+//     });
+//     return false;
+//   }
+
   return (
     <ReceiverBubble>
       <PersonPic src={photoURL} alt="" />
       <SpecialMessageTxt>
         {text &&
           text.split(" ").map((word, i) => {
-            if (keywords && keywords.includes(word.toLowerCase())) {
+            if (keywords) {
+              console.log(
+                keywords
+                  .map((keyword) => keyword.toLowerCase())
+                  .includes(word.toLowerCase())
+              );
+            }
+            if (
+              keywords &&
+              keywords
+                .map((keyword) => keyword.toLowerCase())
+                .includes(word.toLowerCase())
+            ) {
               return (
                 <StyledWordButton
                   key={`${i} ${word}`}
