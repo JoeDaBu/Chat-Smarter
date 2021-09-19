@@ -96,12 +96,15 @@ function FrdScreen({ setSelectedFrd, messages, selectedFrd }) {
   }, [messages]);
 
   function handleFriendClick(friend) {
-    //console.log(friend.id);
+    db.collection("msgs")
+      .where("sentByEmail", "==", friend.email)
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          db.collection("msgs").doc(doc.id).update({ read: true });
+        });
+      });
 
-    friend.read = true;
-    var friend2 = friend;
-    delete friend2.id;
-    db.collection("msgs").doc(friend.id).set(friend2);
     setSelectedFrd(friend);
   }
 
@@ -109,7 +112,11 @@ function FrdScreen({ setSelectedFrd, messages, selectedFrd }) {
     <div>
       {friends.map((friend, index) => {
         console.log(friend);
-        const msg = friend.read ? <Message>{friend.message}</Message> :<UnreadMessage>{friend.message}</UnreadMessage>;
+        const msg = friend.read ? (
+          <Message>{friend.message}</Message>
+        ) : (
+          <UnreadMessage>{friend.message}</UnreadMessage>
+        );
         return (
           <EachFriend
             key={`friend${index}`}

@@ -6,7 +6,6 @@ import FrdScreen from "./FrdScreen";
 
 import styled from "styled-components";
 import ChatMessages from "./ChatMessages";
-import { EmojiObjectsOutlined } from "@mui/icons-material";
 import SearchDialog from "./SearchDialog";
 
 const ChatContainer = styled.div`
@@ -37,7 +36,7 @@ const JustChats = styled.div`
 
 function Chat() {
   const [messages, setMessages] = useState([]);
-  const [selectedFrd, setSelectedFrd] = useState(null);
+  const [selectedFrd, setSelectedFrdState] = useState(null);
   const [searchWords, setSearchWords] = useState("");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
@@ -60,6 +59,10 @@ function Chat() {
         );
       });
   }, []);
+
+  function setSelectedFrd(friend) {
+    setSelectedFrdState(friend);
+  }
 
   return (
     <ChatContainer>
